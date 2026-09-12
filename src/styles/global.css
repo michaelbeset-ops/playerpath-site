@@ -33,7 +33,7 @@
 html {
   scroll-behavior: smooth;
   /* Ruimte zodat de sticky balk anchor-titels niet afdekt. */
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
