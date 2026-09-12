@@ -1,7 +1,19 @@
 ---
 import Check from "./Check.astro";
 
-// LET OP: het formulier heeft nog geen backend.
+// Waar de aanvragen heen gaan. Verander alleen dit adres en de rest volgt.
+//
+// We versturen via FormSubmit: die dienst vraagt geen account, maar stuurt
+// bij de allereerste aanvraag een bevestigingsmail naar dit adres. Klik die
+// link één keer, daarna komt elke aanvraag gewoon binnen.
+const ontvanger = "hallo@playerpath.nl";
+const endpoint = `https://formsubmit.co/${ontvanger}`;
+
+// Na het versturen gaat de bezoeker naar onze eigen bedankpagina.
+const basis = import.meta.env.BASE_URL.replace(/\/$/, "");
+const bedankt = new URL(`${basis}/bedankt/`, Astro.site ?? "http://localhost:4321").href;
+
+// LET OP: oude opmerking.
 // Zet in `action` het echte endpoint (bijvoorbeeld Formspree, of je eigen route)
 // voordat de site live gaat, anders komt er niets binnen.
 const punten = [
@@ -51,9 +63,18 @@ const punten = [
 
         <form
           class="rounded-2xl bg-white p-6 shadow-2xl shadow-black/25 sm:p-8"
-          action="#"
-          method="post"
+          action={endpoint}
+          method="POST"
         >
+          <!-- Instellingen voor FormSubmit; de bezoeker ziet hier niets van. -->
+          <input type="hidden" name="_subject" value="Nieuwe demo-aanvraag via playerpath.nl" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value={bedankt} />
+
+          <!-- Spamval: een mens laat dit veld leeg, een bot vult het in. -->
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
           <div class="grid gap-4 sm:grid-cols-2">
             <div class="sm:col-span-2">
               <label for="naam" class="block text-sm font-semibold text-ink">
