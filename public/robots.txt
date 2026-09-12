@@ -1,0 +1,7 @@
+# Alles mag geïndexeerd worden, behalve de bedankpagina: die is alleen
+# zinvol direct na het versturen van het formulier.
+User-agent: *
+Allow: /
+Disallow: /bedankt
+
+Sitemap: https://playerpath.nl/sitemap-index.xml

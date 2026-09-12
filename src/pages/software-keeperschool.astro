@@ -1,0 +1,108 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PageHero from "../components/PageHero.astro";
+import ContentBlock from "../components/ContentBlock.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import TrialForm from "../components/TrialForm.astro";
+import Footer from "../components/Footer.astro";
+
+const vragen = [
+  {
+    v: "Waarin verschilt dit van gewone clubsoftware?",
+    a: "In de beoordeling. Gewone software kent één set categorieën voor alle spelers, meestal gemaakt voor veldspelers. Een keeper scoort daar per definitie laag op, want hij dribbelt niet en scoort niet. In PlayerPath hebben keepers hun eigen categorieën, zodat een rapport iets zegt over keepen en niet over voetballen in het algemeen.",
+  },
+  {
+    v: "Welke onderdelen beoordeel je bij een keeper?",
+    a: "Reflexen, uitkomen, voetenwerk, 1-op-1, hoge ballen en communicatie. Zes categorieën, elk met een cijfer. Dat is genoeg om verschil te zien en weinig genoeg om een rapport in ongeveer dertig seconden in te vullen.",
+  },
+  {
+    v: "Kan ik keepers en veldspelers in dezelfde school hebben?",
+    a: "Ja. Je legt per speler de positie vast en het systeem kiest daar de juiste beoordelingscategorieën bij. Veel keeperscholen groeien door naar techniektraining voor veldspelers; daar hoef je dus niet voor over te stappen.",
+  },
+  {
+    v: "Werkt het als ik met kleine groepen op meerdere velden tegelijk train?",
+    a: "Ja. Een training heeft een eigen locatie en een of meer trainers, dus twee groepen op hetzelfde tijdstip op verschillende velden is gewoon twee trainingen. Elke trainer ziet op zijn telefoon alleen zijn eigen groep en vinkt daar de aanwezigheid af.",
+  },
+];
+---
+
+<Layout
+  title="Software voor keeperscholen | PlayerPath"
+  description="Software voor keeperscholen: keeperspecifieke beoordelingen, online inschrijven, incasso en een spelerskaart die meegroeit. Vanaf 89 euro per maand, maandelijks opzegbaar."
+>
+  <Nav />
+
+  <main id="hoofdinhoud">
+    <PageHero
+      kruimel="Software voor keeperscholen"
+      eyebrow="Voor keeperscholen"
+      title="Software voor keeperscholen"
+      intro="Een keeper afrekenen op dribbels en doelpunten zegt niets. PlayerPath beoordeelt keepers op wat ze werkelijk doen, en regelt ondertussen je inschrijvingen, betalingen en rooster."
+      punten={[
+        "Zes keeperspecifieke categorieën per rapport",
+        "Kleine groepen, meerdere velden tegelijk",
+        "Clinics en losse trainingen los verkopen",
+        "Ouders zien de groei van hun kind",
+      ]}
+    />
+
+    <ContentBlock
+      eyebrow="Het onderscheid"
+      titel="Een keeper meet je langs een andere lat"
+      alineas={[
+        "De meeste sportsoftware kent één beoordelingsformulier voor iedereen. Daar staan onderdelen op als passing, dribbel en afronding. Vul je dat in voor een keeper van twaalf, dan krijg je een rapport waar niemand iets aan heeft: de cijfers zijn laag en zeggen niets over zijn ontwikkeling onder de lat.",
+        "PlayerPath koppelt de beoordelingscategorieën aan de positie. Een keeper wordt beoordeeld op reflexen, uitkomen, voetenwerk, 1-op-1, hoge ballen en communicatie. Een veldspeler krijgt zijn eigen set. Het rapport is voorgevuld met de vorige keer, dus je past alleen aan wat veranderd is.",
+      ]}
+      punten={[
+        "Reflexen: reageren op een bal die je laat ziet",
+        "Uitkomen: durf en timing bij voorzetten",
+        "Voetenwerk: meevoetballen en uittrappen",
+        "1-op-1: keuze en houding bij een doorgebroken spits",
+        "Hoge ballen: inschatten en pakken",
+        "Communicatie: coachen van de verdediging",
+      ]}
+      tint
+    />
+
+    <ContentBlock
+      eyebrow="Ouders"
+      titel="Waarom keepers blijven, en ouders blijven betalen"
+      alineas={[
+        "Een keeperschool verkoopt iets wat je niet in een wedstrijduitslag ziet. Een ouder die vijfendertig euro per maand betaalt, wil weten wat zijn kind daarvoor leert. Zonder antwoord is opzeggen in januari een logische keuze.",
+        "In PlayerPath krijgt elke speler een kaart die na elk rapport meegroeit, met een niveau dat loopt van brons naar elite. Kinderen willen die kaart laten zien aan opa en oma; ouders zien in één oogopslag dat er aan iets gewerkt wordt. Dat is geen spelletje, het is het verschil tussen een school die vol zit en een school die elk seizoen opnieuw moet werven.",
+      ]}
+      kader={{
+        titel: "Bewust geen ranglijst",
+        tekst: "We zetten spelers niet tegen elkaar af. Een kind van elf hoort niet op plek 14 van 20 te staan. Je ziet groei ten opzichte van zichzelf en van zijn eigen leeftijdsgroep.",
+      }}
+    />
+
+    <FaqBlock titel="Vragen van keeperscholen" vragen={vragen} />
+
+    <RelatedPages
+      items={[
+        {
+          titel: "Spelervolgsysteem",
+          tekst: "Hoe rapporten, doelen en de spelerskaart samenwerken.",
+          href: "/spelervolgsysteem/",
+        },
+        {
+          titel: "Inschrijven en incasso",
+          tekst: "Van aanmelding tot betaald, zonder handwerk.",
+          href: "/inschrijven-en-incasso/",
+        },
+        {
+          titel: "Tarieven",
+          tekst: "Drie pakketten vanaf 89 euro per maand, geen kosten per speler.",
+          href: "/tarieven/",
+        },
+      ]}
+    />
+
+    <TrialForm />
+  </main>
+
+  <Footer />
+</Layout>

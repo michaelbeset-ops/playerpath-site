@@ -1,0 +1,82 @@
+---
+// Een vragenblok met bijbehorende gestructureerde data. Elke landingspagina
+// heeft eigen vragen: dezelfde vragen op meerdere pagina's herhalen levert
+// niets op en kan zelfs tegen je werken.
+interface Props {
+  titel?: string;
+  vragen: { v: string; a: string }[];
+  tint?: boolean;
+}
+
+const { titel = "Veelgestelde vragen", vragen, tint = true } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: vragen.map((item) => ({
+    "@type": "Question",
+    name: item.v,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+---
+
+<section class={`py-20 sm:py-24 ${tint ? "bg-tint" : "bg-white"}`}>
+  <div class="mx-auto max-w-3xl px-5 sm:px-8">
+    <h2
+      class="text-balance text-3xl font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:text-4xl"
+    >
+      {titel}
+    </h2>
+
+    <div class="mt-10 space-y-2.5">
+      {
+        vragen.map((item) => (
+          <details class="faq-item group rounded-2xl border border-line bg-white transition-[border-color,box-shadow] duration-300 open:border-accent/30 open:shadow-[0_16px_40px_-24px_rgba(11,18,32,0.3)]">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left sm:px-6 sm:py-5">
+              <span class="text-[15px] font-semibold leading-snug tracking-tight text-ink sm:text-base">
+                {item.v}
+              </span>
+              <span class="grid size-8 shrink-0 place-items-center rounded-full bg-tint text-accent-deep transition-all duration-300 group-open:rotate-45 group-open:bg-ink group-open:text-accent">
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </summary>
+            <p class="px-5 pb-5 pr-14 text-[15px] leading-relaxed text-muted sm:px-6 sm:pb-6 sm:pr-20">
+              {item.a}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+
+<style>
+  .faq-item {
+    interpolate-size: allow-keywords;
+  }
+
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.35s ease,
+      content-visibility 0.35s allow-discrete;
+  }
+
+  .faq-item[open]::details-content {
+    block-size: auto;
+  }
+</style>

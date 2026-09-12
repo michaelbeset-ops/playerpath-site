@@ -1,0 +1,69 @@
+---
+// Een tekstsectie voor de landingspagina's: kop, een paar alinea's en
+// eventueel een opsomming of een uitgelicht kader.
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  titel: string;
+  alineas: string[];
+  punten?: string[];
+  kader?: { titel: string; tekst: string };
+  tint?: boolean;
+}
+
+const { id, eyebrow, titel, alineas, punten = [], kader, tint = false } = Astro.props;
+---
+
+<section id={id} class={`py-16 sm:py-20 ${tint ? "bg-tint" : "bg-white"}`}>
+  <div class="mx-auto max-w-3xl px-5 sm:px-8">
+    {
+      eyebrow && (
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-accent-deep">{eyebrow}</p>
+      )
+    }
+    <h2
+      class="mt-3 text-balance text-2xl font-semibold leading-[1.12] tracking-[-0.025em] text-ink sm:text-[2rem]"
+    >
+      {titel}
+    </h2>
+
+    <div class="mt-5 space-y-4">
+      {alineas.map((alinea) => <p class="text-pretty leading-relaxed text-muted">{alinea}</p>)}
+    </div>
+
+    {
+      punten.length > 0 && (
+        <ul class="mt-7 space-y-3">
+          {punten.map((punt) => (
+            <li class="flex items-start gap-3 text-[15px] leading-relaxed text-ink">
+              <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-deep">
+                <svg
+                  class="size-3"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </span>
+              {punt}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      kader && (
+        <div class="mt-8 rounded-2xl border border-line bg-tint/70 p-5 sm:p-6">
+          <p class="text-[15px] font-semibold text-ink">{kader.titel}</p>
+          <p class="mt-2 text-[15px] leading-relaxed text-muted">{kader.tekst}</p>
+        </div>
+      )
+    }
+  </div>
+</section>

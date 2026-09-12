@@ -1,0 +1,111 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PageHero from "../components/PageHero.astro";
+import ContentBlock from "../components/ContentBlock.astro";
+import PlayerCardShowcase from "../components/PlayerCardShowcase.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import TrialForm from "../components/TrialForm.astro";
+import Footer from "../components/Footer.astro";
+
+const vragen = [
+  {
+    v: "Wat is een spelervolgsysteem precies?",
+    a: "Een spelervolgsysteem legt per speler vast hoe hij zich ontwikkelt: welke onderdelen beoordeeld zijn, welke cijfers daarbij horen en hoe die cijfers over de seizoenen veranderen. Waar een rooster gaat over wanneer iemand traint, gaat een spelervolgsysteem over wat die trainingen opleveren.",
+  },
+  {
+    v: "Hoeveel tijd kost het invullen van een rapport?",
+    a: "Ongeveer dertig seconden per speler. Je krijgt zes categorieën te zien, elk met een cijfer dat je met één tik aanpast. Het formulier is voorgevuld met het vorige rapport, dus je verandert alleen wat er verschoven is. Bij een groep van twaalf spelers ben je zo in een kwartier klaar.",
+  },
+  {
+    v: "Zien ouders de cijfers van andere kinderen?",
+    a: "Nee. Een ouder ziet alleen zijn eigen kind. Er is ook geen ranglijst tussen spelers onderling: je ziet groei ten opzichte van de speler zelf en ten opzichte van zijn eigen leeftijdsgroep, niet wie de beste van de groep is.",
+  },
+  {
+    v: "Wat gebeurt er met de gegevens aan het eind van het seizoen?",
+    a: "Die blijven staan. Het seizoen sluit af, de kaart blijft. Volgend seizoen bouwt verder op wat er al ligt, zodat je na drie jaar een compleet beeld hebt in plaats van drie losse mappen. Stop je met PlayerPath, dan krijg je een export mee van alles wat je hebt vastgelegd.",
+  },
+];
+---
+
+<Layout
+  title="Spelervolgsysteem voor voetbal- en keeperscholen | PlayerPath"
+  description="Een spelervolgsysteem waarin een rapport dertig seconden kost. Beoordelingen per positie, ontwikkelingsdoelen, voortgang per categorie en een spelerskaart die meegroeit."
+>
+  <Nav />
+
+  <main id="hoofdinhoud">
+    <PageHero
+      kruimel="Spelervolgsysteem"
+      eyebrow="Ontwikkeling vastleggen"
+      title="Een spelervolgsysteem dat trainers ook echt invullen"
+      intro="De meeste volgsystemen stranden op hetzelfde punt: het invullen kost te veel tijd, dus na twee maanden doet niemand het meer. PlayerPath draait die som om. Een rapport kost ongeveer dertig seconden."
+      punten={[
+        "Zes categorieën per positie, apart voor keepers",
+        "Voorgevuld met het vorige rapport",
+        "Doelen met streefcijfer en einddatum",
+        "Ouders zien de voortgang van hun kind",
+      ]}
+    />
+
+    <ContentBlock
+      eyebrow="Waarom het meestal misgaat"
+      titel="Een volgsysteem valt of staat bij de eerste maandag in november"
+      alineas={[
+        "In augustus vult iedereen zijn rapporten netjes in. Het probleem komt later: een trainer die om half tien 's avonds thuiskomt en nog twaalf formulieren van veertien velden moet invullen, doet dat één keer en daarna niet meer. Het systeem staat er nog, maar de gegevens verouderen, en dan is het waardeloos.",
+        "Daarom hebben we het aantal categorieën bewust op zes gehouden en het formulier voorgevuld met de vorige beoordeling. Je bevestigt wat gelijk is gebleven en past aan wat is veranderd. Dat kost seconden, geen avond.",
+      ]}
+      kader={{
+        titel: "Wat dat in de praktijk betekent",
+        tekst: "Een groep van twaalf spelers beoordeel je in ongeveer een kwartier. Doe je dat elk kwartaal, dan heb je aan het eind van het seizoen vier meetmomenten per speler, en dus een grafiek in plaats van een gevoel.",
+      }}
+      tint
+    />
+
+    <ContentBlock
+      eyebrow="Wat je vastlegt"
+      titel="Van los cijfer naar een lijn door het seizoen"
+      alineas={[
+        "Elk rapport levert cijfers per categorie op. Die cijfers komen samen in een grafiek per onderdeel, zodat je ziet dat het uitkomen wél vooruitgaat maar het voetenwerk stil staat. Per kwartaal krijg je een terugblik die je zo kunt gebruiken in een gesprek met ouders.",
+        "Daarnaast kun je per speler een doel vastleggen: een categorie, een streefcijfer en een einddatum. Op de kaart en in het dashboard zie je of iemand op koers ligt of achterloopt. Haalt hij het doel, dan krijgt de speler daar een badge voor en zijn ouders een bericht.",
+      ]}
+      punten={[
+        "Cijfers per categorie, per rapport bewaard",
+        "Voortgangsgrafiek over alle seizoenen heen",
+        "Kwartaal-terugblik per speler",
+        "Doel met streefcijfer, einddatum en signaal bij achterstand",
+        "Maandelijkse samenvatting naar ouder en speler",
+      ]}
+    />
+
+    <PlayerCardShowcase />
+
+    <FaqBlock titel="Vragen over het spelervolgsysteem" vragen={vragen} tint={false} />
+
+    <RelatedPages
+      items={[
+        {
+          titel: "Software voor keeperscholen",
+          tekst: "Beoordelen op reflexen, uitkomen en communicatie in plaats van dribbels.",
+          href: "/software-keeperschool/",
+        },
+        {
+          titel: "Software voor voetbalscholen",
+          tekst: "Blokken, clinics en rittenkaarten verkopen zonder losse lijsten.",
+          href: "/software-voetbalschool/",
+        },
+        {
+          titel: "Tarieven",
+          tekst: "Het spelervolgsysteem zit in Pro en Ultimate.",
+          href: "/tarieven/",
+        },
+      ]}
+      tint
+    />
+
+    <TrialForm />
+  </main>
+
+  <Footer />
+</Layout>

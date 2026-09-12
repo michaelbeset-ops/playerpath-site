@@ -17,6 +17,8 @@ import HowItWorks from "../components/HowItWorks.astro";
 import TrialForm from "../components/TrialForm.astro";
 import Faq from "../components/Faq.astro";
 import Footer from "../components/Footer.astro";
+import SiteSchema from "../components/SiteSchema.astro";
+import RelatedPages from "../components/RelatedPages.astro";
 
 // De volgorde vertelt een verhaal:
 // 1. het probleem herkennen
@@ -98,9 +100,31 @@ import Footer from "../components/Footer.astro";
     <Pricing />
     <Principles />
     <HowItWorks />
+    <RelatedPages
+      titel="Meer over PlayerPath"
+      items={[
+        {
+          titel: "Software voor voetbalscholen",
+          tekst: "Waarom clubsoftware zelden past bij een school die blokken en clinics verkoopt.",
+          href: "/software-voetbalschool/",
+        },
+        {
+          titel: "Software voor keeperscholen",
+          tekst: "Beoordelen op reflexen, uitkomen en communicatie in plaats van dribbels.",
+          href: "/software-keeperschool/",
+        },
+        {
+          titel: "Spelervolgsysteem",
+          tekst: "Een rapport in dertig seconden, en een kaart die seizoen na seizoen meegroeit.",
+          href: "/spelervolgsysteem/",
+        },
+      ]}
+    />
+
     <TrialForm />
     <Faq />
   </main>
 
   <Footer />
+  <SiteSchema />
 </Layout>

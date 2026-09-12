@@ -1,0 +1,122 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PageHero from "../components/PageHero.astro";
+import ContentBlock from "../components/ContentBlock.astro";
+import FeatureBlock from "../components/FeatureBlock.astro";
+import Screen from "../components/Screen.astro";
+import VisualBetalingen from "../components/VisualBetalingen.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import TrialForm from "../components/TrialForm.astro";
+import Footer from "../components/Footer.astro";
+
+const vragen = [
+  {
+    v: "Hoe werkt de automatische incasso?",
+    a: "Een ouder geeft bij het inschrijven een machtiging af via Mollie. Vanaf dat moment wordt het bedrag elke termijn automatisch afgeschreven en gaat de factuur er vanzelf uit. Je hoeft zelf geen betaalverzoek meer te sturen en geen lijst meer af te vinken.",
+  },
+  {
+    v: "Wat gebeurt er bij een storno of een mislukte incasso?",
+    a: "Die wordt herkend en aan je teruggemeld. De betaling komt terug als openstaand, de ouder krijgt een herinnering en jij ziet het op je dashboard staan in plaats van pas als je in het voorjaar je boekhouding doet.",
+  },
+  {
+    v: "Kan een ouder in termijnen betalen?",
+    a: "Ja, en dat scheelt inschrijvingen. Een seizoen van 320 euro kun je aanbieden als vier termijnen van 80 euro. Het type aanbod en de betaalwijze staan los van elkaar, dus je bepaalt zelf wat je aanbiedt.",
+  },
+  {
+    v: "Wat als een groep vol zit?",
+    a: "Dan komt de volgende aanmelding op de wachtlijst. Zegt er iemand af, dan nodig je de eerste van die lijst uit en loopt het verder als een gewone inschrijving: account aangemaakt, abonnement klaargezet, betaling gestart.",
+  },
+];
+---
+
+<Layout
+  title="Online inschrijven en contributie innen | PlayerPath"
+  description="Laat ouders online inschrijven en int contributie met iDEAL of automatische incasso. Facturen, herinneringen en storno's gaan vanzelf. Voor voetbal- en keeperscholen."
+>
+  <Nav />
+
+  <main id="hoofdinhoud">
+    <PageHero
+      kruimel="Inschrijven en incasso"
+      eyebrow="Inschrijven en betalen"
+      title="Online inschrijven en contributie innen"
+      intro="Het grootste deel van je administratie zit in twee dingen: mensen inschrijven en je geld binnenkrijgen. Allebei kunnen ze zonder jou."
+      punten={[
+        "Eén inschrijflink, ook op de telefoon",
+        "iDEAL voor eenmalig, incasso voor doorlopend",
+        "Facturen en herinneringen automatisch",
+        "Wachtlijst als een groep vol zit",
+      ]}
+    />
+
+    <ContentBlock
+      eyebrow="Inschrijven"
+      titel="Van aanmelding naar speler, zonder overtypen"
+      alineas={[
+        "Je deelt één link. Een ouder kiest een groep, ziet wat het kost, vult de gegevens van zijn kind in en rondt de betaling meteen af. Jij krijgt de aanmelding binnen in een inbox, met alles er al bij.",
+        "Keur je de aanmelding goed, dan gebeuren er vier dingen tegelijk: de speler wordt aangemaakt, de ouder krijgt een account, het abonnement wordt klaargezet en de betaling start. Dat is één klik, tegenover ongeveer acht minuten als je het met de hand doet.",
+      ]}
+      punten={[
+        "Openbaar inschrijfformulier met je eigen link",
+        "Ouder kiest zelf het tarief dat past",
+        "Plekken en wachtlijst lopen automatisch mee",
+        "Gegevens van de speler komen direct in je administratie",
+      ]}
+      tint
+    />
+
+    <FeatureBlock
+      eyebrow="Betalingen"
+      title="Het geld komt binnen zonder dat jij eraan denkt"
+      text="Betalingen lopen via Mollie. Ouders betalen eenmalig met iDEAL of geven een machtiging af voor doorlopende incasso. De loop draait 's nachts, dus facturen, herinneringen en mislukte betalingen worden afgehandeld terwijl jij slaapt."
+      punten={[
+        "iDEAL, doorlopende SEPA-incasso en termijnen",
+        "Facturen gaan automatisch de deur uit",
+        "Herinnering bij te laat betalen",
+        "Storno's worden herkend en teruggemeld",
+      ]}
+      flip
+    >
+      <Screen name="betalingen" alt="Het betalingenoverzicht in PlayerPath">
+        <VisualBetalingen />
+      </Screen>
+    </FeatureBlock>
+
+    <ContentBlock
+      eyebrow="Wat het scheelt"
+      titel="Najagen is duurder dan je denkt"
+      alineas={[
+        "Een betaling klaarzetten, versturen en afvinken kost ongeveer drie en een halve minuut per speler per maand. Bij zestig spelers is dat ruim drie uur. Daar komt het najagen bovenop: uitzoeken wie niet betaald heeft en er achteraan gaan kost al snel negen minuten per geval.",
+        "Dat werk verdwijnt niet omdat je harder werkt, maar omdat het systeem het overneemt. Op de homepage staat een rekentool waarin je je eigen aantallen invult, inclusief de aannames waarmee gerekend wordt.",
+      ]}
+    />
+
+    <FaqBlock titel="Vragen over inschrijven en betalen" vragen={vragen} />
+
+    <RelatedPages
+      items={[
+        {
+          titel: "Software voor voetbalscholen",
+          tekst: "Negen soorten aanbod, van blok tot rittenkaart en kamp.",
+          href: "/software-voetbalschool/",
+        },
+        {
+          titel: "Spelervolgsysteem",
+          tekst: "Wat je spelers leren, vastgelegd in dertig seconden per rapport.",
+          href: "/spelervolgsysteem/",
+        },
+        {
+          titel: "Tarieven",
+          tekst: "Inschrijven en incasso zitten in elk pakket.",
+          href: "/tarieven/",
+        },
+      ]}
+    />
+
+    <TrialForm />
+  </main>
+
+  <Footer />
+</Layout>

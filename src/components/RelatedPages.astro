@@ -1,0 +1,49 @@
+---
+// Interne links naar verwante pagina's. Voor bezoekers een logische volgende
+// stap, en voor Google het signaal dat deze pagina's bij elkaar horen.
+interface Props {
+  titel?: string;
+  items: { titel: string; tekst: string; href: string }[];
+  tint?: boolean;
+}
+
+const { titel = "Lees verder", items, tint = false } = Astro.props;
+const basis = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<section class={`py-16 sm:py-20 ${tint ? "bg-tint" : "bg-white"}`}>
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <h2 class="text-xl font-semibold tracking-tight text-ink sm:text-2xl">{titel}</h2>
+
+    <div class="mt-8 grid gap-4 sm:grid-cols-3">
+      {
+        items.map((item) => (
+          <a
+            href={`${basis}${item.href}`}
+            class="group flex flex-col rounded-2xl border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-lg hover:shadow-ink/5"
+          >
+            <h3 class="text-[17px] font-semibold leading-snug tracking-tight text-ink">
+              {item.titel}
+            </h3>
+            <p class="mt-2 flex-1 text-[15px] leading-relaxed text-muted">{item.tekst}</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-accent-deep">
+              Bekijken
+              <svg
+                class="btn-arrow size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

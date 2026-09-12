@@ -1,0 +1,120 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PageHero from "../components/PageHero.astro";
+import ContentBlock from "../components/ContentBlock.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import TrialForm from "../components/TrialForm.astro";
+import Footer from "../components/Footer.astro";
+
+const vragen = [
+  {
+    v: "Is PlayerPath geschikt voor een voetbalschool met meerdere locaties?",
+    a: "Ja. Een training hangt aan een locatie en aan een of meer trainers, dus je kunt op dinsdag op het ene sportpark trainen en op donderdag op het andere. Iedereen kijkt naar hetzelfde rooster. Draai je meerdere vestigingen als aparte eenheden, met eigen groepen en eigen cijfers, dan heb je het Ultimate-pakket nodig.",
+  },
+  {
+    v: "Kan ik losse clinics, kampen en proeflessen verkopen?",
+    a: "Ja, dat zijn aparte soorten aanbod met hun eigen gedrag. Een kamp loopt over vaste dagen, een blok van datum tot datum, een rittenkaart raakt op zodra een trainer iemand aanwezig meldt, en een proefles kun je gratis of tegen een klein bedrag aanbieden. In totaal zijn er negen soorten.",
+  },
+  {
+    v: "Werkt dit naast de ledenadministratie van de vereniging?",
+    a: "Ja, en dat is meestal ook de situatie. Spelers zijn lid van hun eigen club en trainen daarnaast bij jouw school. PlayerPath gaat alleen over jouw school: jouw groepen, jouw tarieven, jouw spelers. Er is geen koppeling met Sportlink nodig.",
+  },
+  {
+    v: "Hoe snel kan ik open voor inschrijvingen?",
+    a: "De meeste scholen hebben hun groepen, locaties, trainers en tarieven binnen een uur staan. Daarna deel je één link en kunnen ouders inschrijven. Heb je al een lijst in Excel, dan zetten we die bij de start voor je om.",
+  },
+];
+---
+
+<Layout
+  title="Software voor voetbalscholen | PlayerPath"
+  description="Software voor voetbalscholen: online inschrijven, automatische incasso, rooster en aanwezigheid op één plek. Verkoop blokken, clinics en rittenkaarten. Vanaf 89 euro per maand."
+>
+  <Nav />
+
+  <main id="hoofdinhoud">
+    <PageHero
+      kruimel="Software voor voetbalscholen"
+      eyebrow="Voor voetbalscholen"
+      title="Software voor voetbalscholen"
+      intro="Een voetbalschool is geen vereniging. Je verkoopt blokken, clinics en losse trainingen, je groepen wisselen per seizoen en je ouders willen weten wat hun kind leert. PlayerPath is daarop gebouwd."
+      punten={[
+        "Ouders schrijven online in, betalen direct",
+        "Incasso en herinneringen lopen automatisch",
+        "Eén rooster voor trainers en ouders",
+        "Aanwezigheid afvinken naast het veld",
+      ]}
+    />
+
+    <ContentBlock
+      eyebrow="Het verschil"
+      titel="Waarom clubsoftware zelden past bij een voetbalschool"
+      alineas={[
+        "Verenigingssoftware gaat uit van één model: een lid betaalt contributie per seizoen en speelt in een team. Dat werkt prima voor een club met elftallen, maar een voetbalschool verkoopt iets anders. Bij jou komt de ene speler een blok van zes weken, de tweede koopt een rittenkaart van tien beurten, en de derde schrijft zich in voor een kamp in de meivakantie.",
+        "Probeer je dat in software te persen die alleen jaarcontributie kent, dan eindig je met losse lijsten ernaast. Precies daar gaat het mis: je administratie klopt niet meer, je weet niet wie er betaald heeft, en aan het eind van het seizoen kun je een ouder niet vertellen waar zijn kind beter in is geworden.",
+      ]}
+      punten={[
+        "Doorlopende training die pas stopt als iemand hem stopt",
+        "Blok van datum tot datum, bijvoorbeeld zes weken",
+        "Kamp of clinic op vaste dagen",
+        "Rittenkaart met beurten die opraken",
+        "Privétraining of small group",
+        "Proefles, gratis of tegen een klein bedrag",
+      ]}
+      kader={{
+        titel: "Waarom dit uitmaakt voor je omzet",
+        tekst: "Elk type kan eenmalig of in termijnen betaald worden. Een ouder die 320 euro voor een heel seizoen te veel vindt, zegt wel ja tegen vier keer 80 euro. Dat verschil merk je direct in het aantal inschrijvingen.",
+      }}
+      tint
+    />
+
+    <ContentBlock
+      eyebrow="Van aanmelding tot eerste training"
+      titel="Eén link, en de rest gaat vanzelf"
+      alineas={[
+        "Je deelt één inschrijflink, bijvoorbeeld in je Instagram-bio of in de appgroep van de club. Een ouder kiest een groep, ziet het tarief, vult de gegevens van zijn kind in en rekent af met iDEAL of geeft een machtiging voor automatische incasso.",
+        "Bij jou komt die aanmelding in een inbox terecht. Keur je hem goed, dan maakt het systeem in één handeling de speler aan, koppelt het de ouder aan een account, zet het abonnement klaar en start de betaling. Jij typt niets over.",
+        "Is een groep vol, dan komt de volgende aanmelding op de wachtlijst. Zegt er iemand af, dan nodig je de eerste van die lijst uit zonder je hele mailbox door te spitten.",
+      ]}
+    />
+
+    <ContentBlock
+      eyebrow="Wat het oplevert"
+      titel="Reken je eigen situatie door"
+      alineas={[
+        "Bij zestig spelers en zes trainingen per week kost het bijhouden van betalingen, aanwezigheid en terugkoppeling ongeveer twaalf uur per maand als je het met losse hulpmiddelen doet. Dat is anderhalve werkdag, elke maand, aan werk dat niemand ziet.",
+        "Op de homepage staat een rekentool waarin je je eigen aantallen invult. Hij laat per taak zien waar de tijd in gaat en wat er met PlayerPath van overblijft, inclusief de aannames waarmee gerekend wordt. Je kunt hem dus zelf nacontroleren.",
+      ]}
+      tint
+    />
+
+    <FaqBlock titel="Vragen van voetbalscholen" vragen={vragen} tint={false} />
+
+    <RelatedPages
+      items={[
+        {
+          titel: "Software voor keeperscholen",
+          tekst: "Keepers hebben eigen beoordelingscategorieën en kleinere groepen.",
+          href: "/software-keeperschool/",
+        },
+        {
+          titel: "Spelervolgsysteem",
+          tekst: "Rapporten in dertig seconden en een spelerskaart die meegroeit.",
+          href: "/spelervolgsysteem/",
+        },
+        {
+          titel: "Tarieven",
+          tekst: "Drie pakketten vanaf 89 euro per maand, zonder kosten per speler.",
+          href: "/tarieven/",
+        },
+      ]}
+      tint
+    />
+
+    <TrialForm />
+  </main>
+
+  <Footer />
+</Layout>

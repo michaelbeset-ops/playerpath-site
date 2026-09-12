@@ -1,0 +1,82 @@
+---
+// Gestructureerde gegevens voor Google: wie we zijn, wat het product is en
+// wat het kost. Hierdoor kan Google prijzen en bedrijfsgegevens tonen in de
+// zoekresultaten in plaats van alleen een blauwe link.
+//
+// Staat alleen op de homepage; op andere pagina's zou het dubbelop zijn.
+const thuis = (Astro.site ?? new URL("https://playerpath.nl")).href.replace(/\/$/, "");
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${thuis}/#organisatie`,
+      name: "PlayerPath",
+      url: `${thuis}/`,
+      logo: `${thuis}/logo/playerpath-logo-inkt.png`,
+      email: "info@sitefront.nl",
+      telephone: "+31643430003",
+      areaServed: { "@type": "Country", name: "Nederland" },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "sales",
+          email: "info@sitefront.nl",
+          telephone: "+31643430003",
+          availableLanguage: ["nl"],
+        },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${thuis}/#website`,
+      url: `${thuis}/`,
+      name: "PlayerPath",
+      inLanguage: "nl-NL",
+      publisher: { "@id": `${thuis}/#organisatie` },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${thuis}/#software`,
+      name: "PlayerPath",
+      applicationCategory: "BusinessApplication",
+      applicationSubCategory: "Sportclub- en ledenadministratie",
+      operatingSystem: "Web, iOS, Android",
+      inLanguage: "nl-NL",
+      url: `${thuis}/`,
+      description:
+        "Software voor keeperscholen en voetbalscholen: online inschrijven, automatische incasso, rooster, aanwezigheid en een spelerskaart die meegroeit met elk rapport.",
+      publisher: { "@id": `${thuis}/#organisatie` },
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Basic",
+          price: "89",
+          priceCurrency: "EUR",
+          url: `${thuis}/tarieven/`,
+          description: "Inschrijvingen, betalingen, ledenbeheer, rooster en aanwezigheid.",
+        },
+        {
+          "@type": "Offer",
+          name: "Pro",
+          price: "119",
+          priceCurrency: "EUR",
+          url: `${thuis}/tarieven/`,
+          description: "Alles van Basic, plus spelerskaarten, beoordelingen en doelen.",
+        },
+        {
+          "@type": "Offer",
+          name: "Ultimate",
+          price: "249",
+          priceCurrency: "EUR",
+          url: `${thuis}/tarieven/`,
+          description: "Alles van Pro, plus white label, eigen domein en meerdere vestigingen.",
+        },
+      ],
+    },
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import PageHero from "../components/PageHero.astro";
+import Pricing from "../components/Pricing.astro";
+import Principles from "../components/Principles.astro";
+import FaqBlock from "../components/FaqBlock.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import TrialForm from "../components/TrialForm.astro";
+import Footer from "../components/Footer.astro";
+
+const vragen = [
+  {
+    v: "Betaal ik meer als mijn school groeit?",
+    a: "Nee. Je betaalt één bedrag per maand, ongeacht het aantal spelers. Groei je van veertig naar honderdveertig spelers, dan blijft je rekening gelijk. Bij software die per lid rekent wordt succes duur; dat vonden we een rare prikkel.",
+  },
+  {
+    v: "Zijn er opstartkosten of een contract?",
+    a: "Nee en nee. Er zijn geen eenmalige kosten om te beginnen en er is geen minimale looptijd. Je betaalt per maand en zegt per maand op. Als het niet werkt voor jouw school, moet je weg kunnen zonder gedoe.",
+  },
+  {
+    v: "Kan ik wisselen van pakket?",
+    a: "Elke maand. Begin gerust met Basic om de administratie op orde te krijgen en stap over naar Pro zodra je met rapporten en spelerskaarten wilt werken. Je raakt bij het wisselen niets kwijt.",
+  },
+  {
+    v: "Zijn de bedragen inclusief btw?",
+    a: "Nee, alle bedragen zijn exclusief btw. Een voetbalschool is een onderneming en trekt de btw af, dus een prijs exclusief btw is wat er in een gesprek hoort te staan.",
+  },
+  {
+    v: "Wat kost het verwerken van betalingen?",
+    a: "De betaalkosten van Mollie lopen rechtstreeks tussen jou en Mollie; die zitten niet in het maandbedrag verwerkt. Je betaalt dus geen opslag aan ons per transactie.",
+  },
+];
+---
+
+<Layout
+  title="Tarieven en pakketten voor voetbalscholen | PlayerPath"
+  description="Drie pakketten voor voetbal- en keeperscholen: Basic 89 euro, Pro 119 euro en Ultimate 249 euro per maand, exclusief btw. Geen kosten per speler, maandelijks opzegbaar."
+>
+  <Nav />
+
+  <main id="hoofdinhoud">
+    <PageHero
+      kruimel="Tarieven"
+      eyebrow="Wat het kost"
+      title="Eén bedrag per maand, hoeveel spelers je ook hebt"
+      intro="Drie pakketten, van alleen de administratie tot alles onder je eigen naam. Geen kosten per speler, geen opstartkosten, maandelijks opzegbaar."
+      punten={[
+        "Basic 89 euro per maand",
+        "Pro 119 euro per maand",
+        "Ultimate 249 euro per maand",
+        "Alle bedragen exclusief btw",
+      ]}
+    />
+
+    <Pricing />
+    <Principles />
+
+    <FaqBlock titel="Vragen over de prijs" vragen={vragen} />
+
+    <RelatedPages
+      items={[
+        {
+          titel: "Software voor voetbalscholen",
+          tekst: "Waarom clubsoftware zelden past bij een voetbalschool.",
+          href: "/software-voetbalschool/",
+        },
+        {
+          titel: "Software voor keeperscholen",
+          tekst: "Beoordelen op wat een keeper werkelijk doet.",
+          href: "/software-keeperschool/",
+        },
+        {
+          titel: "Inschrijven en incasso",
+          tekst: "Van aanmelding tot betaald, zonder handwerk.",
+          href: "/inschrijven-en-incasso/",
+        },
+      ]}
+      tint
+    />
+
+    <TrialForm />
+  </main>
+
+  <Footer />
+</Layout>

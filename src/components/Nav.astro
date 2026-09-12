@@ -3,12 +3,17 @@
 // De link van de sectie die je aan het lezen bent licht op, zodat je altijd
 // weet waar je bent op een lange pagina.
 const links = [
-  { label: "Spelerskaart", href: "#spelerskaart" },
-  { label: "Functies", href: "#alles" },
-  { label: "Tijdwinst", href: "#tijdwinst" },
-  { label: "Tarieven", href: "#prijs" },
-  { label: "Vragen", href: "#faq" },
+  { label: "Voetbalscholen", href: "/software-voetbalschool/" },
+  { label: "Keeperscholen", href: "/software-keeperschool/" },
+  { label: "Spelervolgsysteem", href: "/spelervolgsysteem/" },
+  { label: "Inschrijven", href: "/inschrijven-en-incasso/" },
+  { label: "Tarieven", href: "/tarieven/" },
 ];
+
+// Welke pagina staat open? Dat bepaalt welke link oplicht. Dit gebeurt bij
+// het bouwen, dus daar is geen JavaScript voor nodig.
+const huidig = Astro.url.pathname.replace(/\/$/, "");
+const actief = (href: string) => huidig === href.replace(/\/$/, "");
 
 // Het basispad van de site, zonder slash aan het eind. Op GitHub Pages is dat
 // /playerpath-site, met een eigen domein gewoon leeg. Bestanden uit /public
@@ -37,9 +42,8 @@ const basis = import.meta.env.BASE_URL.replace(/\/$/, "");
           links.map((link) => (
             <li>
               <a
-                href={link.href}
-                data-nav-link
-                aria-current="false"
+                href={`${basis}${link.href}`}
+                aria-current={actief(link.href) ? "true" : "false"}
                 class="block rounded-lg px-3.5 py-2 text-[13.5px] font-medium text-white/60 transition-colors duration-200 hover:text-white aria-[current=true]:bg-white/[0.08] aria-[current=true]:text-white"
               >
                 {link.label}
@@ -91,7 +95,7 @@ const basis = import.meta.env.BASE_URL.replace(/\/$/, "");
           links.map((link) => (
             <li>
               <a
-                href={link.href}
+                href={`${basis}${link.href}`}
                 class="block rounded-xl px-3 py-3 text-[15px] font-medium text-white/80 transition-colors hover:bg-white/[0.05] hover:text-white"
               >
                 {link.label}
@@ -148,24 +152,4 @@ const basis = import.meta.env.BASE_URL.replace(/\/$/, "");
     );
   }
 
-  // Laat zien in welke sectie je zit.
-  const navLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")];
-  const secties = navLinks
-    .map((link) => document.querySelector<HTMLElement>(link.getAttribute("href") ?? ""))
-    .filter((sectie): sectie is HTMLElement => sectie !== null);
-
-  if ("IntersectionObserver" in window && secties.length > 0) {
-    const kijker = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          navLinks.forEach((link) =>
-            link.setAttribute("aria-current", String(link.getAttribute("href") === `#${entry.target.id}`)),
-          );
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px" },
-    );
-    secties.forEach((sectie) => kijker.observe(sectie));
-  }
 </script>
