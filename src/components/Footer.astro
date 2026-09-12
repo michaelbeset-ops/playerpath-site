@@ -62,8 +62,8 @@ const jaar = new Date().getFullYear();
 
 <footer class="bg-ink">
   <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
-    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_repeat(5,1fr)] lg:gap-8">
-      <div class="lg:col-span-1">
+    <div class="grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-[1.5fr_repeat(5,1fr)] lg:gap-8">
+      <div class="col-span-2 lg:col-span-1">
         <a href="#" class="inline-flex items-center">
           <img
             src={`${basis}/logo/playerpath-logo-wit.png`}
@@ -81,7 +81,7 @@ const jaar = new Date().getFullYear();
 
       {
         kolommen.map((kolom) => (
-          <div>
+          <div class={kolom.titel === "Voor wie" ? "max-sm:hidden" : ""}>
             <h2 class="text-sm font-semibold text-white">{kolom.titel}</h2>
             <ul class="mt-4 space-y-2.5">
               {kolom.links.map((link) => (

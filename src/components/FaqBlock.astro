@@ -21,7 +21,7 @@ const faqSchema = {
 };
 ---
 
-<section class={`py-20 sm:py-24 ${tint ? "bg-tint" : "bg-white"}`}>
+<section class={`py-12 sm:py-24 ${tint ? "bg-tint" : "bg-white"}`}>
   <div class="mx-auto max-w-3xl px-5 sm:px-8">
     <h2
       class="text-balance text-3xl font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:text-4xl"
@@ -29,10 +29,10 @@ const faqSchema = {
       {titel}
     </h2>
 
-    <div class="mt-10 space-y-2.5">
+    <div class="faq-lijst mt-10 space-y-2.5">
       {
-        vragen.map((item) => (
-          <details class="faq-item group rounded-2xl border border-line bg-white transition-[border-color,box-shadow] duration-300 open:border-accent/30 open:shadow-[0_16px_40px_-24px_rgba(11,18,32,0.3)]">
+        vragen.map((item, i) => (
+          <details class={`faq-item group rounded-2xl ${i >= 5 ? "faq-extra" : ""} border border-line bg-white transition-[border-color,box-shadow] duration-300 open:border-accent/30 open:shadow-[0_16px_40px_-24px_rgba(11,18,32,0.3)]`}>
             <summary class="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left sm:px-6 sm:py-5">
               <span class="text-[15px] font-semibold leading-snug tracking-tight text-ink sm:text-base">
                 {item.v}
@@ -57,6 +57,14 @@ const faqSchema = {
           </details>
         ))
       }
+
+      <button
+        type="button"
+        data-faq-meer
+        class="w-full rounded-2xl border border-line bg-white py-3.5 text-sm font-semibold text-ink sm:hidden"
+      >
+        Toon alle {vragen.length} vragen
+      </button>
     </div>
   </div>
 </section>
@@ -80,3 +88,13 @@ const faqSchema = {
     block-size: auto;
   }
 </style>
+
+<script>
+  // Op mobiel eerst vijf vragen; de rest na één tik.
+  document.querySelectorAll<HTMLButtonElement>("[data-faq-meer]").forEach((knop) => {
+    knop.addEventListener("click", () => {
+      knop.closest(".faq-lijst")?.classList.add("faq-alles");
+      knop.remove();
+    });
+  });
+</script>

@@ -23,7 +23,7 @@ const schuifjes = [
 ];
 ---
 
-<section id="tijdwinst" class="relative isolate overflow-hidden bg-ink py-16 sm:py-24">
+<section id="tijdwinst" class="relative isolate overflow-hidden bg-ink py-12 sm:py-24">
   <div class="absolute -right-40 top-10 -z-10 size-[34rem] rounded-full bg-accent/10 blur-[130px]" aria-hidden="true"></div>
 
   <div
@@ -96,7 +96,15 @@ const schuifjes = [
         Dat is elke maand ruim een hele werkdag aan overtypen, najagen en afvinken.
       </p>
 
-      <div class="mt-6 border-t border-white/10 pt-5">
+      <button
+        type="button"
+        data-tw-toon
+        class="mt-5 w-full rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/80 sm:hidden"
+      >
+        Bekijk waar de tijd in gaat
+      </button>
+
+      <div data-tw-uitsplitsing class="mt-6 border-t border-white/10 pt-5 max-sm:hidden">
         <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">
           Waar het in zit, per maand
         </p>
@@ -277,4 +285,13 @@ const schuifjes = [
     verslag.addEventListener("change", bereken);
     bereken();
   })();
+</script>
+
+<script>
+  const knop = document.querySelector<HTMLButtonElement>("[data-tw-toon]");
+  const blok = document.querySelector<HTMLElement>("[data-tw-uitsplitsing]");
+  knop?.addEventListener("click", () => {
+    blok?.classList.remove("max-sm:hidden");
+    knop.remove();
+  });
 </script>

@@ -87,7 +87,7 @@ const groepen = [
 ];
 ---
 
-<section id="prijs" class="bg-white py-20 sm:py-28">
+<section id="prijs" class="bg-white py-12 sm:py-28">
   <div class="mx-auto max-w-6xl px-5 sm:px-8">
     <SectionHeading
       eyebrow="Tarieven"
@@ -96,11 +96,12 @@ const groepen = [
       class="reveal"
     />
 
-    <div class="mt-14 grid gap-5 lg:grid-cols-3 lg:items-stretch">
+    <div data-prijs-rij class="mt-8 grid gap-5 sm:mt-14 lg:grid-cols-3 lg:items-stretch swipe-rij max-sm:-mx-5 max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:gap-3 max-sm:overflow-x-auto max-sm:px-5 max-sm:pb-2 max-sm:[scrollbar-width:none]">
       {
         pakketten.map((p, i) => (
           <div
-            class={`reveal relative flex flex-col rounded-3xl p-7 sm:p-8 ${
+            data-uitgelicht={p.uitgelicht ? "" : undefined}
+            class={`reveal relative flex flex-col rounded-3xl p-7 sm:p-8 max-sm:w-[84%] max-sm:shrink-0 max-sm:snap-center ${
               p.uitgelicht
                 ? "bg-ink text-white shadow-[0_40px_100px_-35px_rgba(11,18,32,0.7)] ring-1 ring-accent/30"
                 : "border border-line bg-white"
@@ -303,3 +304,13 @@ const groepen = [
     block-size: auto;
   }
 </style>
+
+<script>
+  // Op een telefoon begint de swipe-rij bij het aanbevolen pakket, niet bij Basic.
+  const rij = document.querySelector<HTMLElement>("[data-prijs-rij]");
+  const pro = rij?.querySelector<HTMLElement>("[data-uitgelicht]");
+  if (rij && pro && window.matchMedia("(max-width: 639px)").matches) {
+    const verschil = pro.getBoundingClientRect().left - rij.getBoundingClientRect().left;
+    rij.scrollLeft += verschil - (rij.clientWidth - pro.clientWidth) / 2;
+  }
+</script>

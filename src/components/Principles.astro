@@ -22,7 +22,7 @@ const keuzes = [
 ];
 ---
 
-<section class="relative overflow-hidden bg-ink py-20 sm:py-28 lg:py-[7.5rem]">
+<section class="relative overflow-hidden bg-ink py-12 sm:py-28 lg:py-[7.5rem]">
   <div
     class="pointer-events-none absolute -left-32 bottom-0 size-[30rem] rounded-full bg-accent/8 blur-[120px]"
     aria-hidden="true"
@@ -45,11 +45,11 @@ const keuzes = [
       </p>
     </div>
 
-    <div class="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-2">
+    <div class="mt-8 grid gap-6 sm:mt-14 lg:mt-16 lg:grid-cols-2 swipe-rij max-sm:-mx-5 max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:gap-3 max-sm:overflow-x-auto max-sm:px-5 max-sm:pb-2 max-sm:[scrollbar-width:none]">
       {
         keuzes.map((keuze, i) => (
           <div
-            class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-7"
+            class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-7 max-sm:w-[84%] max-sm:shrink-0 max-sm:snap-center"
             style={`transition-delay:${(i % 2) * 90}ms`}
           >
             <div class="flex items-start gap-3">

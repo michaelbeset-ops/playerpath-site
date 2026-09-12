@@ -49,7 +49,7 @@ const rijen = [
 ];
 ---
 
-<section id="probleem" class="bg-white py-16 sm:py-24">
+<section id="probleem" class="bg-white py-12 sm:py-24">
   <div class="mx-auto max-w-6xl px-5 sm:px-8">
     <SectionHeading
       eyebrow="Het probleem"
@@ -59,7 +59,7 @@ const rijen = [
     />
 
     <div
-      class="reveal mt-12 overflow-hidden rounded-3xl border border-line bg-white shadow-[0_30px_70px_-45px_rgba(11,18,32,0.45)]"
+      class="reveal mt-8 overflow-hidden rounded-3xl border border-line bg-white shadow-[0_30px_70px_-45px_rgba(11,18,32,0.45)] sm:mt-12 max-md:overflow-visible max-md:rounded-none max-md:border-0 max-md:bg-transparent max-md:shadow-none"
     >
       <div class="hidden grid-cols-[15.5rem_1fr_1fr] text-[11px] font-semibold uppercase tracking-[0.14em] md:grid">
         <div class="px-6 py-4 text-muted">Waarmee</div>
@@ -81,10 +81,10 @@ const rijen = [
         </div>
       </div>
 
-      <ul>
+      <ul class="swipe-rij max-md:-mx-5 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 max-md:[scrollbar-width:none]">
         {
           rijen.map((rij) => (
-            <li class="grid border-t border-line first:border-t-0 md:grid-cols-[15.5rem_1fr_1fr] md:first:border-t">
+            <li class="grid max-md:w-[84%] max-md:shrink-0 max-md:snap-center max-md:content-start max-md:rounded-2xl max-md:border max-md:border-line max-md:bg-white md:grid-cols-[15.5rem_1fr_1fr] md:border-t md:border-line">
               <div class="flex items-center gap-3 px-5 pt-5 md:px-6 md:py-4">
                 <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-tint text-ink/70">
                   <svg

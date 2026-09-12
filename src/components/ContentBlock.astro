@@ -14,7 +14,7 @@ interface Props {
 const { id, eyebrow, titel, alineas, punten = [], kader, tint = false } = Astro.props;
 ---
 
-<section id={id} class={`py-16 sm:py-20 ${tint ? "bg-tint" : "bg-white"}`}>
+<section id={id} class={`py-11 sm:py-20 ${tint ? "bg-tint" : "bg-white"}`}>
   <div class="mx-auto max-w-3xl px-5 sm:px-8">
     {
       eyebrow && (

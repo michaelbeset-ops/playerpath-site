@@ -44,7 +44,7 @@ const soorten = [
 ];
 ---
 
-<section id="aanbod" class="bg-tint py-20 sm:py-28 lg:py-[7.5rem]">
+<section id="aanbod" class="bg-tint py-12 sm:py-28 lg:py-[7.5rem]">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <SectionHeading
       eyebrow="Jouw aanbod"
@@ -53,11 +53,11 @@ const soorten = [
       class="reveal"
     />
 
-    <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+    <div class="mt-8 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 swipe-rij max-sm:-mx-5 max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:gap-3 max-sm:overflow-x-auto max-sm:px-5 max-sm:pb-2 max-sm:[scrollbar-width:none]">
       {
         soorten.map((soort, i) => (
           <div
-            class="reveal group flex gap-4 rounded-2xl border border-line bg-white p-5 transition-colors duration-300 hover:border-accent/40"
+            class="reveal group flex gap-4 rounded-2xl border border-line bg-white p-5 max-sm:w-[84%] max-sm:shrink-0 max-sm:snap-center transition-colors duration-300 hover:border-accent/40"
             style={`transition-delay:${(i % 3) * 70}ms`}
           >
             <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-accent-soft text-[13px] font-semibold text-accent-deep">

@@ -99,3 +99,22 @@ body {
     transform: translateY(-10px);
   }
 }
+
+/* Swipe-rijen op mobiel. Kaarten die buiten beeld beginnen, krijgen geen
+   verschijn-animatie: anders blijven ze onzichtbaar tot je erheen swipet. */
+@media (max-width: 767px) {
+  .swipe-rij > .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .swipe-rij::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Op mobiel eerst vijf vragen tonen. */
+@media (max-width: 639px) {
+  .faq-lijst:not(.faq-alles) .faq-extra {
+    display: none;
+  }
+}
