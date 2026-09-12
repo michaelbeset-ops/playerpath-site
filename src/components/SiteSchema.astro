@@ -18,6 +18,23 @@ const schema = {
       email: "info@sitefront.nl",
       telephone: "+31643430003",
       areaServed: { "@type": "Country", name: "Nederland" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Dordrecht",
+        addressCountry: "NL",
+      },
+      // PlayerPath wordt gemaakt en geleverd door Sitefront. Het KvK-nummer
+      // hoort bij die onderneming, niet bij het product.
+      parentOrganization: {
+        "@type": "Organization",
+        name: "Sitefront",
+        url: "https://sitefront.nl",
+        identifier: {
+          "@type": "PropertyValue",
+          propertyID: "KvK",
+          value: "42057398",
+        },
+      },
       contactPoint: [
         {
           "@type": "ContactPoint",
