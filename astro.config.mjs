@@ -13,6 +13,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (pagina) => !pagina.includes('/bedankt'),
+      // Zonder lastmod moet Google zelf gokken of er iets veranderd is.
+      serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
     }),
   ],
 
