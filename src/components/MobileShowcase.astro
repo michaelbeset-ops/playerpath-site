@@ -1,0 +1,78 @@
+---
+import Screen from "./Screen.astro";
+import Check from "./Check.astro";
+
+// De mobiele schermen krijgen hun eigen blok, op een formaat waarop je ze kunt
+// lezen. Als klein telefoontje in de hoek van een ander scherm waren ze alleen
+// decoratie; hier zijn ze het argument.
+const punten = [
+  "Inschrijven en afrekenen zonder een app te installeren",
+  "Abonnement en facturen altijd inzichtelijk",
+  "Afmelden voor een training met één tik",
+  "Op het beginscherm te zetten, met het icoon van jouw school",
+];
+---
+
+<section class="overflow-hidden bg-tint py-20 sm:py-28">
+  <div
+    class="mx-auto grid max-w-6xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-10 [&>*]:min-w-0"
+  >
+    <div class="reveal">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-accent-deep">Voor ouders</p>
+      <h2
+        class="mt-3 text-balance text-3xl font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:text-4xl lg:text-[2.6rem]"
+      >
+        Ouders regelen alles op hun telefoon
+      </h2>
+      <p class="mt-4 max-w-md text-pretty leading-relaxed text-muted sm:text-lg">
+        Ze schrijven hun kind in tussen twee afspraken door, zien wat er openstaat en melden
+        af als er een verjaardag tussenkomt. Jij krijgt minder losse appjes.
+      </p>
+
+      <ul class="mt-8 space-y-3.5">
+        {
+          punten.map((punt) => (
+            <li class="flex items-start gap-3 text-[15px] leading-relaxed text-ink">
+              <Check />
+              {punt}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="reveal relative" style="transition-delay:120ms">
+      <div
+        class="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-[90px]"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative mx-auto flex max-w-[34rem] items-start justify-center gap-4 sm:gap-7">
+        <figure class="w-[46%] max-w-[15.5rem]">
+          <Screen
+            name="inschrijven-mobiel"
+            alt="Het inschrijfformulier van een voetbalschool op een telefoon"
+            variant="phone"
+            sizes="(min-width: 1024px) 248px, 45vw"
+          />
+          <figcaption class="mt-4 text-center text-sm font-medium text-ink">
+            Inschrijven en afrekenen
+          </figcaption>
+        </figure>
+
+        <figure class="mt-14 w-[46%] max-w-[15.5rem] sm:mt-20">
+          <Screen
+            name="facturen-mobiel"
+            alt="Het abonnement en de facturen van een ouder op een telefoon"
+            variant="phone"
+            sizes="(min-width: 1024px) 248px, 45vw"
+          />
+          <figcaption class="mt-4 text-center text-sm font-medium text-ink">
+            Abonnement en facturen
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>

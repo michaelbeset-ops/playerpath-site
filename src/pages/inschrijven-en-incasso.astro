@@ -8,6 +8,7 @@ import Screen from "../components/Screen.astro";
 import VisualBetalingen from "../components/VisualBetalingen.astro";
 import VisualPlanning from "../components/VisualPlanning.astro";
 import FaqBlock from "../components/FaqBlock.astro";
+import MobileShowcase from "../components/MobileShowcase.astro";
 import RelatedPages from "../components/RelatedPages.astro";
 import TrialForm from "../components/TrialForm.astro";
 import Footer from "../components/Footer.astro";
@@ -95,7 +96,9 @@ const vragen = [
       ]}
     />
 
-    <FaqBlock titel="Vragen over inschrijven en betalen" vragen={vragen} />
+    <MobileShowcase />
+
+    <FaqBlock titel="Vragen over inschrijven en betalen" vragen={vragen} tint={false} />
 
     <RelatedPages
       items={[

@@ -8,6 +8,7 @@ import Screen from "../components/Screen.astro";
 import VisualPlanning from "../components/VisualPlanning.astro";
 import VisualBetalingen from "../components/VisualBetalingen.astro";
 import PlayerCardShowcase from "../components/PlayerCardShowcase.astro";
+import MobileShowcase from "../components/MobileShowcase.astro";
 import Offerings from "../components/Offerings.astro";
 import AllFeatures from "../components/AllFeatures.astro";
 import TimeCalculator from "../components/TimeCalculator.astro";
@@ -52,18 +53,9 @@ import RelatedPages from "../components/RelatedPages.astro";
       ]}
       tint
     >
-      <div class="relative">
-        <Screen name="trainingen" alt="Het trainingsrooster in PlayerPath">
-          <VisualPlanning />
-        </Screen>
-        <Screen
-          name="inschrijven-mobiel"
-          alt="Het inschrijfformulier op een telefoon"
-          variant="phone"
-          optional
-          class="absolute -bottom-10 -left-6 hidden w-[32%] min-w-[8.5rem] sm:block lg:-left-12"
-        />
-      </div>
+      <Screen name="trainingen" alt="Het trainingsrooster in PlayerPath">
+        <VisualPlanning />
+      </Screen>
     </FeatureBlock>
 
     <FeatureBlock
@@ -79,20 +71,12 @@ import RelatedPages from "../components/RelatedPages.astro";
       ]}
       flip
     >
-      <div class="relative">
-        <Screen name="betalingen" alt="Het betalingenoverzicht in PlayerPath">
-          <VisualBetalingen />
-        </Screen>
-        <Screen
-          name="facturen-mobiel"
-          alt="Het factuuroverzicht voor ouders op een telefoon"
-          variant="phone"
-          optional
-          class="absolute -bottom-10 -right-6 hidden w-[32%] min-w-[8.5rem] sm:block lg:-right-12"
-        />
-      </div>
+      <Screen name="betalingen" alt="Het betalingenoverzicht in PlayerPath">
+        <VisualBetalingen />
+      </Screen>
     </FeatureBlock>
 
+    <MobileShowcase />
     <PlayerCardShowcase />
     <Offerings />
     <AllFeatures />
