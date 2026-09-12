@@ -1,0 +1,76 @@
+---
+import Check from "./Check.astro";
+import Button from "./Button.astro";
+
+// Afwisselend tekstblok met visual, naar voorbeeld van trainin.nl.
+// flip=true zet de visual links en de tekst rechts.
+interface Props {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  text: string;
+  punten: string[];
+  flip?: boolean;
+  tint?: boolean;
+  cta?: string;
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  text,
+  punten,
+  flip = false,
+  tint = false,
+  cta,
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class={`py-20 sm:py-28 lg:py-[7.5rem] ${tint ? "bg-tint" : "bg-white"}`}
+>
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20 [&>*]:min-w-0">
+      <div class={`reveal ${flip ? "lg:order-2" : ""}`}>
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-accent-deep">
+          {eyebrow}
+        </p>
+        <h2
+          class="mt-3 text-3xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-[2.5rem]"
+        >
+          {title}
+        </h2>
+        <p class="mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+          {text}
+        </p>
+
+        <ul class="mt-8 space-y-3.5">
+          {
+            punten.map((punt) => (
+              <li class="flex items-start gap-3 text-[15px] font-medium text-ink">
+                <Check />
+                {punt}
+              </li>
+            ))
+          }
+        </ul>
+
+        {
+          cta && (
+            <div class="mt-9">
+              <Button href="#proef-aanvragen" variant="accent">
+                {cta}
+              </Button>
+            </div>
+          )
+        }
+      </div>
+
+      <div class={`reveal ${flip ? "lg:order-1" : ""}`} style="transition-delay:120ms">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>

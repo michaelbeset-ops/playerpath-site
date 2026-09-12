@@ -1,0 +1,83 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import BrowserFrame from "./BrowserFrame.astro";
+import PhoneFrame from "./PhoneFrame.astro";
+
+// Echte schermafbeeldingen van het platform.
+//
+// Zet een bestand in src/assets/screens/ met de naam die hier gevraagd wordt
+// (bijvoorbeeld dashboard.png) en het verschijnt vanzelf op de site, scherp
+// en in de juiste formaten. Ontbreekt het bestand, dan tonen we wat er tussen
+// de tags staat: de nagebouwde versie. Bij `optional` tonen we dan niets.
+interface Props {
+  name: string;
+  alt: string;
+  variant?: "desktop" | "phone";
+  url?: string;
+  optional?: boolean;
+  eager?: boolean;
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  name,
+  alt,
+  variant = "desktop",
+  url = "app.playerpath.nl",
+  optional = false,
+  eager = false,
+  sizes,
+  class: extra = "",
+} = Astro.props;
+
+const bestanden = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/screens/*.{png,jpg,jpeg,webp,avif}",
+  { eager: true },
+);
+
+const gevonden = Object.entries(bestanden).find(([pad]) => {
+  const bestand = pad.split("/").pop() ?? "";
+  return bestand.replace(/\.[^.]+$/, "") === name;
+});
+
+const beeld = gevonden?.[1].default;
+const telefoon = variant === "phone";
+const breedtes = telefoon ? [320, 640, 960] : [800, 1400, 2000, 2800];
+const maten =
+  sizes ?? (telefoon ? "(min-width: 1024px) 240px, 40vw" : "(min-width: 1280px) 1152px, 100vw");
+---
+
+{
+  beeld ? (
+    telefoon ? (
+      <PhoneFrame class={extra}>
+        <Image
+          src={beeld}
+          alt={alt}
+          widths={breedtes}
+          sizes={maten}
+          loading={eager ? "eager" : "lazy"}
+          class="block h-full w-full object-cover object-top"
+        />
+      </PhoneFrame>
+    ) : (
+      <BrowserFrame url={url} class={extra}>
+        <Image
+          src={beeld}
+          alt={alt}
+          widths={breedtes}
+          sizes={maten}
+          loading={eager ? "eager" : "lazy"}
+          fetchpriority={eager ? "high" : "auto"}
+          class="block aspect-[16/10] w-full object-cover object-top"
+        />
+      </BrowserFrame>
+    )
+  ) : !optional ? (
+    <div class={extra}>
+      <slot />
+    </div>
+  ) : null
+}

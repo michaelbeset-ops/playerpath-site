@@ -1,0 +1,106 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Problem from "../components/Problem.astro";
+import FeatureBlock from "../components/FeatureBlock.astro";
+import Screen from "../components/Screen.astro";
+import VisualPlanning from "../components/VisualPlanning.astro";
+import VisualBetalingen from "../components/VisualBetalingen.astro";
+import PlayerCardShowcase from "../components/PlayerCardShowcase.astro";
+import Offerings from "../components/Offerings.astro";
+import AllFeatures from "../components/AllFeatures.astro";
+import TimeCalculator from "../components/TimeCalculator.astro";
+import Pricing from "../components/Pricing.astro";
+import Principles from "../components/Principles.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import TrialForm from "../components/TrialForm.astro";
+import Faq from "../components/Faq.astro";
+import Footer from "../components/Footer.astro";
+
+// De volgorde vertelt een verhaal:
+// 1. het probleem herkennen
+// 2. zien hoe PlayerPath het oplost, met de spelerskaart als hoogtepunt
+// 3. alles wat erin zit
+// 4. uitrekenen wat het oplevert, en dan pas de prijs
+// 5. vertrouwen: waar we voor staan en hoe snel je live bent
+// 6. aanvragen, en de laatste twijfels wegnemen
+---
+
+<Layout
+  title="PlayerPath, software voor keeper- en voetbalscholen"
+  description="PlayerPath regelt inschrijvingen, incasso, rooster en aanwezigheid voor keeper- en voetbalscholen, en geeft elke speler een kaart die groeit met elk rapport. Vanaf 89 euro per maand."
+>
+  <Nav />
+
+  <main id="hoofdinhoud">
+    <Hero />
+    <Problem />
+
+    <FeatureBlock
+      id="planning"
+      eyebrow="Inschrijven en plannen"
+      title="Inschrijven zonder één mail heen en weer"
+      text="Ouders schrijven hun kind in via jouw eigen link en kiezen zelf het tarief. Jij keurt goed, en in één klik staan de speler, het ouderaccount en het abonnement klaar."
+      punten={[
+        "Eén inschrijflink, gemaakt voor de telefoon",
+        "Aanmeldingen komen in een inbox die jij goedkeurt",
+        "Eén rooster dat trainers en ouders allebei zien",
+        "Aanwezigheid afvinken naast het veld, ouders melden zelf af",
+      ]}
+      tint
+    >
+      <div class="relative">
+        <Screen name="trainingen" alt="Het trainingsrooster in PlayerPath">
+          <VisualPlanning />
+        </Screen>
+        <Screen
+          name="inschrijven-mobiel"
+          alt="Het inschrijfformulier op een telefoon"
+          variant="phone"
+          optional
+          class="absolute -bottom-10 -left-6 hidden w-[32%] min-w-[8.5rem] sm:block lg:-left-12"
+        />
+      </div>
+    </FeatureBlock>
+
+    <FeatureBlock
+      id="betalingen"
+      eyebrow="Betalingen"
+      title="Het geld komt vanzelf binnen"
+      text="Betalingen lopen via Mollie. De incasso draait elke maand automatisch, facturen en herinneringen gaan vanzelf de deur uit, en je ziet per speler wat binnen is en wat openstaat."
+      punten={[
+        "iDEAL voor eenmalig, doorlopende incasso met machtiging",
+        "Een heel seizoen in termijnen betalen",
+        "Herinneringen gaan vanzelf, jij zit er niet achteraan",
+        "Storno's worden herkend en aan je teruggemeld",
+      ]}
+      flip
+    >
+      <div class="relative">
+        <Screen name="betalingen" alt="Het betalingenoverzicht in PlayerPath">
+          <VisualBetalingen />
+        </Screen>
+        <Screen
+          name="facturen-mobiel"
+          alt="Het factuuroverzicht voor ouders op een telefoon"
+          variant="phone"
+          optional
+          class="absolute -bottom-10 -right-6 hidden w-[32%] min-w-[8.5rem] sm:block lg:-right-12"
+        />
+      </div>
+    </FeatureBlock>
+
+    <PlayerCardShowcase />
+    <Offerings />
+    <AllFeatures />
+    <TimeCalculator />
+    <Pricing />
+    <Principles />
+    <HowItWorks />
+    <TrialForm />
+    <Faq />
+  </main>
+
+  <Footer />
+</Layout>

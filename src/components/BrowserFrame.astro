@@ -1,0 +1,42 @@
+---
+// Een strak browservenster om een scherm heen. Donker, zodat het op een
+// lichte én een donkere sectie als één product leest.
+interface Props {
+  url?: string;
+  class?: string;
+}
+
+const { url = "app.playerpath.nl", class: extra = "" } = Astro.props;
+---
+
+<div
+  class={`overflow-hidden rounded-xl bg-[#0d1424] shadow-[0_40px_120px_-30px_rgba(11,18,32,0.55)] ring-1 ring-white/10 sm:rounded-2xl ${extra}`}
+>
+  <div class="flex items-center gap-3 border-b border-white/[0.07] px-3 py-2 sm:px-4 sm:py-2.5">
+    <div class="flex w-12 gap-1.5" aria-hidden="true">
+      <span class="size-2.5 rounded-full bg-white/15"></span>
+      <span class="size-2.5 rounded-full bg-white/15"></span>
+      <span class="size-2.5 rounded-full bg-white/15"></span>
+    </div>
+    <div
+      class="mx-auto flex min-w-0 items-center gap-1.5 rounded-md bg-white/[0.06] px-3 py-1 text-[11px] text-white/45"
+    >
+      <svg
+        class="size-3 shrink-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+      </svg>
+      <span class="truncate">{url}</span>
+    </div>
+    <div class="w-12" aria-hidden="true"></div>
+  </div>
+  <slot />
+</div>

@@ -1,0 +1,129 @@
+---
+import AppChrome from "./AppChrome.astro";
+
+// Nagebouwd naar het echte scherm /trainings van PlayerPath,
+// met de gegevens van de voorbeeldschool "Keepersschool Rob".
+const dagen = [
+  {
+    dag: "Dinsdag 8 september",
+    vandaag: true,
+    trainingen: [
+      {
+        van: "18:00",
+        tot: "19:30",
+        titel: "Keepers middag",
+        merk: "JIJ",
+        locatie: "Sportpark De Vliert",
+        trainer: "Eigenaar Keepersschool Rob",
+        spelers: "6 spelers verwacht",
+      },
+    ],
+  },
+  {
+    dag: "Donderdag 10 september",
+    vandaag: false,
+    trainingen: [
+      {
+        van: "18:00",
+        tot: "19:30",
+        titel: "Voorbeeldgroep",
+        merk: "JIJ",
+        locatie: "Sportpark De Voorbeeldweide",
+        trainer: "Eigenaar Keepersschool Rob",
+        spelers: "4 spelers verwacht",
+      },
+    ],
+  },
+  {
+    dag: "Zaterdag 12 september",
+    vandaag: false,
+    trainingen: [
+      {
+        van: "10:00",
+        tot: "11:30",
+        titel: "Keepers ochtend",
+        merk: null,
+        locatie: "Sportpark De Vliert, veld 3",
+        trainer: "geen trainer",
+        spelers: "9 spelers verwacht",
+      },
+    ],
+  },
+];
+---
+
+<div
+  class="overflow-hidden rounded-2xl border border-line bg-white shadow-xl shadow-ink/8"
+  aria-hidden="true"
+>
+  <AppChrome actief="Agenda" />
+
+  <div class="p-5 sm:p-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="text-lg font-semibold tracking-tight text-ink">Trainingen</p>
+        <p class="mt-0.5 text-xs text-muted">Het rooster van je school.</p>
+      </div>
+      <span class="rounded-lg bg-accent-deep px-3 py-2 text-[11px] font-semibold text-white">
+        + Training inplannen
+      </span>
+    </div>
+
+    <div class="mt-4 inline-flex rounded-lg border border-line p-1">
+      <span class="rounded-md bg-accent-deep px-3 py-1.5 text-[11px] font-semibold text-white">
+        Komend (7)
+      </span>
+      <span class="px-3 py-1.5 text-[11px] font-semibold text-muted">Geweest (1)</span>
+    </div>
+
+    <div class="mt-5 space-y-4">
+      {
+        dagen.map((dag) => (
+          <div>
+            <div class="flex items-center gap-2">
+              <p
+                class={`text-[11px] font-semibold ${dag.vandaag ? "text-accent-deep" : "text-ink"}`}
+              >
+                {dag.dag}
+              </p>
+              {dag.vandaag && (
+                <span class="rounded bg-accent-soft px-1.5 py-0.5 text-[9px] font-semibold text-accent-deep">
+                  vandaag
+                </span>
+              )}
+            </div>
+
+            {dag.trainingen.map((t) => (
+              <div class="mt-2 rounded-xl border border-line p-3.5">
+                <div class="flex gap-3.5">
+                  <div class="w-11 shrink-0">
+                    <p class="text-sm font-semibold tabular-nums text-accent-deep">{t.van}</p>
+                    <p class="text-[11px] tabular-nums text-muted">{t.tot}</p>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                      <p class="truncate text-sm font-semibold text-ink">{t.titel}</p>
+                      {t.merk && (
+                        <span class="rounded bg-accent-soft px-1.5 py-0.5 text-[9px] font-semibold text-accent-deep">
+                          {t.merk}
+                        </span>
+                      )}
+                    </div>
+                    <p class="mt-1 truncate text-[11px] text-muted">{t.locatie}</p>
+                    <p class="truncate text-[11px] text-muted">{t.trainer}</p>
+                  </div>
+                </div>
+                <div class="mt-3 flex items-center justify-between border-t border-line pt-2.5">
+                  <span class="rounded bg-tint px-2 py-1 text-[10px] font-medium text-muted">
+                    {t.spelers}
+                  </span>
+                  <span class="text-[10px] font-semibold text-muted">Details &rsaquo;</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+
+// De negen aanbodtypes uit App\Enums\ProductType van het platform.
+// Teksten volgen de description() van die enum, zodat site en software
+// hetzelfde zeggen.
+const soorten = [
+  {
+    naam: "Doorlopende training",
+    tekst: "Loopt door tot iemand hem stopt, met elke termijn een rekening.",
+  },
+  {
+    naam: "Blok",
+    tekst: "Een vaste reeks trainingen tussen twee datums, bijvoorbeeld zes weken.",
+  },
+  {
+    naam: "Kamp of clinic",
+    tekst: "Een kamp, clinic of toernooi op vaste dagen.",
+  },
+  {
+    naam: "Losse training",
+    tekst: "Eén training, één keer betalen.",
+  },
+  {
+    naam: "Privétraining",
+    tekst: "Eén op één, op een moment dat jullie samen kiezen.",
+  },
+  {
+    naam: "Small group",
+    tekst: "Met een klein groepje, met een vaste reeks momenten.",
+  },
+  {
+    naam: "Rittenkaart",
+    tekst: "Een aantal beurten die opraken zodra een trainer iemand aanwezig meldt.",
+  },
+  {
+    naam: "Proefles",
+    tekst: "Eén keer meetrainen om te kijken of het bevalt, gratis of tegen een klein bedrag.",
+  },
+  {
+    naam: "Kleding en materiaal",
+    tekst: "Alles wat je verder verkoopt, van keepershandschoenen tot een tenue.",
+  },
+];
+---
+
+<section id="aanbod" class="bg-tint py-20 sm:py-28 lg:py-[7.5rem]">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <SectionHeading
+      eyebrow="Jouw aanbod"
+      title="Negen manieren om je aanbod te verkopen"
+      intro="Je hoeft je school niet om te bouwen naar wat de software toevallig kan. Elk type gedraagt zich anders: een blok loopt van datum tot datum, een rittenkaart raakt op, een doorlopende training stopt pas als iemand hem stopt."
+      class="reveal"
+    />
+
+    <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+      {
+        soorten.map((soort, i) => (
+          <div
+            class="reveal group flex gap-4 rounded-2xl border border-line bg-white p-5 transition-colors duration-300 hover:border-accent/40"
+            style={`transition-delay:${(i % 3) * 70}ms`}
+          >
+            <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-accent-soft text-[13px] font-semibold text-accent-deep">
+              {i + 1}
+            </span>
+            <div>
+              <h3 class="text-[15px] font-semibold tracking-tight text-ink">{soort.naam}</h3>
+              <p class="mt-1.5 text-[13px] leading-relaxed text-muted">{soort.tekst}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="reveal mt-8 text-center text-sm text-muted">
+      Betalen staat er los van: elk type kan eenmalig zijn of in termijnen per maand.
+    </p>
+  </div>
+</section>

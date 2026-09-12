@@ -1,0 +1,16 @@
+---
+// Een telefoon om een mobiel scherm heen. Verhouding van een iPhone 14/15 Pro.
+interface Props {
+  class?: string;
+}
+
+const { class: extra = "" } = Astro.props;
+---
+
+<div
+  class={`rounded-[2.2rem] bg-[#05080f] p-[0.45rem] shadow-[0_30px_80px_-20px_rgba(11,18,32,0.6)] ring-1 ring-white/10 ${extra}`}
+>
+  <div class="relative aspect-[393/852] overflow-hidden rounded-[1.8rem] bg-white">
+    <slot />
+  </div>
+</div>

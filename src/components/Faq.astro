@@ -1,0 +1,152 @@
+---
+import Button from "./Button.astro";
+
+// De vragen die een schoolhouder stelt vlak voordat hij ja zegt.
+// Links blijft de kop met een contactblok staan terwijl je door de vragen scrolt.
+//
+// LET OP: controleer de reactietermijn, de overstaphulp en het mailadres op wat
+// je echt waarmaakt voordat de site live gaat.
+const vragen = [
+  {
+    v: "Wat is PlayerPath en voor wie is het gemaakt?",
+    a: "PlayerPath is software voor keeperscholen, voetbalscholen en jeugdopleidingen. Je regelt inschrijvingen, betalingen, het rooster, aanwezigheid en de ontwikkeling van je spelers op één plek, in plaats van in Excel, WhatsApp, Tikkie en je mailbox tegelijk.",
+  },
+  {
+    v: "Wat kost het en zit ik ergens aan vast?",
+    a: "Er zijn drie pakketten: Basic voor 89 euro, Pro voor 119 euro en Ultimate voor 249 euro per maand, exclusief btw. Er zijn geen opstartkosten en geen kosten per speler. Je zegt maandelijks op en kunt elke maand wisselen van pakket.",
+  },
+  {
+    v: "Welk pakket past bij mijn school?",
+    a: "Wil je vooral van de administratie af, dan is Basic genoeg: inschrijvingen, betalingen en ledenbeheer. Wil je dat ouders en spelers de ontwikkeling zien, met spelerskaarten en beoordelingen, kies dan Pro. Heb je meerdere vestigingen of wil je alles onder je eigen naam en domein, dan is Ultimate voor jou.",
+  },
+  {
+    v: "Hoe lang duurt het voordat ik draai?",
+    a: "De meeste scholen zetten hun groepen, locaties, trainers en tarieven binnen een uur klaar. Daarna deel je één inschrijflink en kun je open. Heb je een bestaande administratie, dan helpen we bij het overzetten.",
+  },
+  {
+    v: "Kan ik mijn huidige spelers en groepen overzetten?",
+    a: "Ja. Staat je administratie nu in Excel of Google Sheets, dan zetten we die bij de start voor je om. Je begint dus niet met een leeg systeem en hoeft niets over te typen.",
+  },
+  {
+    v: "Hoe werken de betalingen precies?",
+    a: "Betalingen lopen via Mollie. Ouders betalen eenmalig met iDEAL of geven een machtiging af voor doorlopende incasso. Een heel seizoen kan ook in termijnen. Facturen en herinneringen gaan automatisch de deur uit, en een storno wordt herkend en aan je teruggemeld.",
+  },
+  {
+    v: "Wat gebeurt er als een ouder niet betaalt?",
+    a: "Je ziet per speler wat openstaat en hoe lang al. Herinneringen gaan automatisch, dus jij hoeft er niet achteraan. Blijft het openstaan, dan zie je dat meteen op je dashboard in plaats van pas aan het eind van het seizoen.",
+  },
+  {
+    v: "Werkt het op de telefoon, ook op het veld?",
+    a: "Ja. Aanwezigheid afvinken en een rapport invullen doe je op je telefoon. Je kunt PlayerPath als app op je beginscherm zetten. Valt de verbinding weg, dan krijg je een nette offline-pagina in plaats van een foutmelding.",
+  },
+  {
+    v: "Hoeveel tijd kost het invullen van een rapport?",
+    a: "Ongeveer dertig seconden. Zes categorieën, één tik per cijfer, en het formulier is al voorgevuld met het vorige rapport. Je past alleen aan wat veranderd is.",
+  },
+  {
+    v: "Werkt het ook voor veldspelers, of alleen voor keepers?",
+    a: "Allebei. Keepers en veldspelers hebben elk hun eigen beoordelingscategorieën, dus een keeper wordt niet langs een veldspelerlat gelegd.",
+  },
+  {
+    v: "Kunnen ouders zelf inloggen?",
+    a: "Ja. Ouders zien de trainingen van hun kind en de aanwezigheid. Vanaf Pro zien ze ook de spelerskaart en de voortgang, en krijgen ze bericht bij een nieuw rapport en een maandelijkse samenvatting.",
+  },
+  {
+    v: "Kan ik mijn eigen logo en kleuren gebruiken?",
+    a: "Met Ultimate wel. Je logo en merkkleur lopen dan door het hele systeem, ook op het inschrijfformulier en in de e-mails aan ouders. Die e-mails gaan uit naam van jouw school, en PlayerPath draait op je eigen domein.",
+  },
+  {
+    v: "Wat gebeurt er met de gegevens van de spelers?",
+    a: "Je werkt met gegevens van minderjarigen, dus daar gaan we zorgvuldig mee om. De gegevens blijven van jouw school, worden niet met derden gedeeld en elke rol ziet alleen wat hij mag zien. Een ouder ziet alleen zijn eigen kind.",
+  },
+  {
+    v: "Wat als ik toch stop?",
+    a: "Je zegt op per maand en krijgt een export van je gegevens mee: spelers, trainingen, aanwezigheid en je financiële overzichten. Je gegevens gijzelen om je te laten blijven, is geen manier van zakendoen.",
+  },
+];
+
+// Zodat Google de vragen kan tonen in de zoekresultaten.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: vragen.map((item) => ({
+    "@type": "Question",
+    name: item.v,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+---
+
+<section id="faq" class="bg-tint py-20 sm:py-28">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+    <div class="reveal lg:sticky lg:top-28 lg:self-start">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-accent-deep">Veelgestelde vragen</p>
+      <h2 class="mt-3 text-balance text-3xl font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:text-4xl">
+        Alles wat je wilt weten voordat je begint
+      </h2>
+      <p class="mt-4 text-pretty leading-relaxed text-muted">
+        {vragen.length} vragen die schoolhouders ons stellen. Staat de jouwe er niet bij, dan hoor je
+        het binnen een werkdag van een mens.
+      </p>
+
+      <div class="mt-8 rounded-3xl bg-ink p-6 text-white shadow-[0_30px_70px_-40px_rgba(11,18,32,0.7)]">
+        <p class="text-lg font-semibold tracking-tight">Liever even overleggen?</p>
+        <p class="mt-1.5 text-sm leading-relaxed text-white/60">
+          In een demo laten we zien hoe jouw groepen, tarieven en spelers er straks uitzien.
+        </p>
+        <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <Button href="#proef-aanvragen">Plan een demo</Button>
+          <a href="mailto:hallo@playerpath.nl" class="text-sm font-medium text-white/70 underline-offset-4 hover:text-white hover:underline">
+            hallo@playerpath.nl
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal space-y-2.5" style="transition-delay:80ms">
+      {
+        vragen.map((item) => (
+          <details class="faq-item group rounded-2xl border border-line bg-white transition-[border-color,box-shadow] duration-300 open:border-accent/30 open:shadow-[0_16px_40px_-24px_rgba(11,18,32,0.3)]">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left sm:px-6 sm:py-5">
+              <span class="text-[15px] font-semibold leading-snug tracking-tight text-ink sm:text-base">{item.v}</span>
+              <span class="grid size-8 shrink-0 place-items-center rounded-full bg-tint text-accent-deep transition-all duration-300 group-open:rotate-45 group-open:bg-ink group-open:text-accent">
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </summary>
+            <p class="px-5 pb-5 pr-14 text-[15px] leading-relaxed text-muted sm:px-6 sm:pb-6 sm:pr-20">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+
+<style>
+  .faq-item {
+    interpolate-size: allow-keywords;
+  }
+
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.35s ease,
+      content-visibility 0.35s allow-discrete;
+  }
+
+  .faq-item[open]::details-content {
+    block-size: auto;
+  }
+</style>

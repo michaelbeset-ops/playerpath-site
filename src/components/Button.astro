@@ -1,0 +1,63 @@
+---
+// Knop naar voorbeeld van trainin.nl: tekst links, pijl in een cirkel rechts.
+// Varianten: accent (groen), light (wit), outline (lijn op donker).
+interface Props {
+  href: string;
+  variant?: "accent" | "light" | "outline";
+  size?: "md" | "lg";
+  arrow?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = "accent",
+  size = "md",
+  arrow = true,
+  class: extra = "",
+} = Astro.props;
+
+const shell: Record<string, string> = {
+  accent: "bg-accent text-ink hover:bg-accent-deep hover:text-white",
+  light: "bg-white text-ink hover:bg-accent-soft",
+  outline: "border border-white/25 text-white hover:border-white/60 hover:bg-white/5",
+};
+
+const bubble: Record<string, string> = {
+  accent: "bg-ink text-accent",
+  light: "bg-ink text-white",
+  outline: "bg-white/10 text-white",
+};
+
+const maat = size === "lg" ? "text-[15px]" : "text-sm";
+const padding = arrow ? "py-[5px] pl-5 pr-[5px]" : "px-5 py-[11px]";
+---
+
+<a
+  href={href}
+  class={`group inline-flex items-center gap-3 rounded-[10px] font-semibold leading-none transition-colors duration-200 ${shell[variant]} ${maat} ${padding} ${extra}`}
+>
+  <span>
+    <slot />
+  </span>
+  {
+    arrow && (
+      <span
+        class={`grid size-8 shrink-0 place-items-center rounded-lg ${bubble[variant]}`}
+        aria-hidden="true"
+      >
+        <svg
+          class="btn-arrow size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
+    )
+  }
+</a>

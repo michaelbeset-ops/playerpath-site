@@ -1,0 +1,61 @@
+---
+import "@fontsource-variable/outfit";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0B1220" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/logo/playerpath-favicon-64.png" />
+    <link rel="icon" type="image/png" sizes="256x256" href="/logo/playerpath-favicon-256.png" />
+    <link rel="apple-touch-icon" href="/logo/playerpath-favicon-256.png" />
+    <title>{title}</title>
+  </head>
+  <body class="font-sans antialiased">
+    <a
+      href="#hoofdinhoud"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:font-semibold focus:text-ink"
+    >
+      Naar hoofdinhoud
+    </a>
+    <slot />
+
+    <script>
+      // Secties krijgen .is-visible zodra ze in beeld komen.
+      // Staat de bezoeker minder beweging toe, dan zetten we ze meteen zichtbaar.
+      const items = document.querySelectorAll<HTMLElement>(".reveal");
+      const stil = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (stil || !("IntersectionObserver" in window)) {
+        items.forEach((el) => el.classList.add("is-visible"));
+      } else {
+        const waarnemer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              waarnemer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -12% 0px", threshold: 0.05 },
+        );
+        items.forEach((el) => waarnemer.observe(el));
+      }
+    </script>
+  </body>
+</html>

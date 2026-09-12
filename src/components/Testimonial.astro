@@ -1,0 +1,42 @@
+---
+// NIET IN GEBRUIK. Dit blok staat klaar voor zodra je een echte review hebt,
+// met toestemming van de klant. Zet hem dan terug in src/pages/index.astro.
+// Nooit een verzonnen citaat plaatsen: dat is een misleidende handelspraktijk.
+const citaat = {
+  kop: "Eindelijk één plek waar alles staat.",
+  tekst:
+    "We begonnen met twee keeperstrainers op één veld. Inmiddels draaien we vier groepen op twee locaties. De inschrijvingen en betalingen lopen vanzelf, dus ik ben mijn zondagavond niet meer kwijt aan administratie.",
+  naam: "Youri",
+  rol: "Keepersclinic Noord",
+};
+---
+
+<section class="bg-tint py-20 sm:py-24 lg:py-[7.5rem]">
+  <div class="mx-auto max-w-4xl px-5 text-center sm:px-8">
+    <div class="reveal">
+      <div class="flex justify-center gap-1" aria-label="5 van de 5 sterren">
+        {
+          [0, 1, 2, 3, 4].map(() => (
+            <svg class="size-5 text-accent-deep" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="m12 2 2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.1 6.1 20.2l1.2-6.6L2.5 9l6.6-.9z" />
+            </svg>
+          ))
+        }
+      </div>
+
+      <blockquote class="mt-7">
+        <p class="text-2xl font-semibold leading-snug tracking-tight text-ink sm:text-3xl">
+          &ldquo;{citaat.kop}&rdquo;
+        </p>
+        <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+          {citaat.tekst}
+        </p>
+      </blockquote>
+
+      <p class="mt-7 text-sm font-semibold text-ink">
+        {citaat.naam}
+        <span class="font-medium text-muted"> &mdash; {citaat.rol}</span>
+      </p>
+    </div>
+  </div>
+</section>

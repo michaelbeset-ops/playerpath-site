@@ -1,0 +1,166 @@
+---
+// Een zwevende menubalk: glas over de pagina, met genoeg lucht eromheen.
+// De link van de sectie die je aan het lezen bent licht op, zodat je altijd
+// weet waar je bent op een lange pagina.
+const links = [
+  { label: "Spelerskaart", href: "#spelerskaart" },
+  { label: "Functies", href: "#alles" },
+  { label: "Tijdwinst", href: "#tijdwinst" },
+  { label: "Tarieven", href: "#prijs" },
+  { label: "Vragen", href: "#faq" },
+];
+---
+
+<header id="kop" class="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+  <div
+    id="kop-balk"
+    class="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-ink/70 shadow-[0_12px_40px_-16px_rgba(0,0,0,0.65)] backdrop-blur-xl backdrop-saturate-150 transition-colors duration-300"
+  >
+    <nav class="flex h-14 items-center justify-between gap-4 pl-4 pr-2 sm:pl-5" aria-label="Hoofdmenu">
+      <a href="#" class="flex shrink-0 items-center rounded-lg">
+        <img
+          src="/logo/playerpath-logo-wit.png"
+          alt="PlayerPath"
+          width="898"
+          height="192"
+          class="h-[26px] w-auto sm:h-7"
+        />
+      </a>
+
+      <ul class="hidden items-center gap-0.5 lg:flex">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                data-nav-link
+                aria-current="false"
+                class="block rounded-lg px-3.5 py-2 text-[13.5px] font-medium text-white/60 transition-colors duration-200 hover:text-white aria-[current=true]:bg-white/[0.08] aria-[current=true]:text-white"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex items-center gap-1.5">
+        <a
+          href="#"
+          class="hidden rounded-lg px-3 py-2 text-[13.5px] font-medium text-white/65 transition-colors duration-200 hover:text-white sm:block"
+        >
+          Inloggen
+        </a>
+        <a
+          href="#proef-aanvragen"
+          class="hidden items-center rounded-xl bg-accent px-4 py-2 text-[13.5px] font-semibold text-ink shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15),0_8px_24px_-8px_rgba(34,197,94,0.7)] transition-colors duration-200 hover:bg-[#4ade80] sm:inline-flex"
+        >
+          Plan een demo
+        </a>
+        <button
+          id="menuknop"
+          type="button"
+          class="grid size-10 place-items-center rounded-xl text-white transition-colors duration-200 hover:bg-white/[0.06] lg:hidden"
+          aria-expanded="false"
+          aria-controls="mobielmenu"
+        >
+          <span class="sr-only">Menu openen</span>
+          <svg
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 8h16M4 16h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div id="mobielmenu" hidden class="border-t border-white/10 px-2 pb-3 pt-2 lg:hidden">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="block rounded-xl px-3 py-3 text-[15px] font-medium text-white/80 transition-colors hover:bg-white/[0.05] hover:text-white"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-2 grid grid-cols-2 gap-2 px-1">
+        <a
+          href="#"
+          class="rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white"
+        >
+          Inloggen
+        </a>
+        <a
+          href="#proef-aanvragen"
+          class="rounded-xl bg-accent px-4 py-3 text-center text-sm font-semibold text-ink"
+        >
+          Plan een demo
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const balk = document.getElementById("kop-balk");
+  const knop = document.getElementById("menuknop");
+  const paneel = document.getElementById("mobielmenu");
+
+  // Boven de donkere hero mag de balk doorzichtiger zijn; daarna iets voller.
+  if (balk) {
+    const bijwerken = () => {
+      const gescrold = window.scrollY > 24;
+      balk.classList.toggle("bg-ink/70", !gescrold);
+      balk.classList.toggle("bg-ink/90", gescrold);
+    };
+    bijwerken();
+    window.addEventListener("scroll", bijwerken, { passive: true });
+  }
+
+  if (knop && paneel) {
+    knop.addEventListener("click", () => {
+      const openen = paneel.hidden;
+      paneel.hidden = !openen;
+      knop.setAttribute("aria-expanded", String(openen));
+    });
+    paneel.querySelectorAll("a").forEach((link) =>
+      link.addEventListener("click", () => {
+        paneel.hidden = true;
+        knop.setAttribute("aria-expanded", "false");
+      }),
+    );
+  }
+
+  // Laat zien in welke sectie je zit.
+  const navLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")];
+  const secties = navLinks
+    .map((link) => document.querySelector<HTMLElement>(link.getAttribute("href") ?? ""))
+    .filter((sectie): sectie is HTMLElement => sectie !== null);
+
+  if ("IntersectionObserver" in window && secties.length > 0) {
+    const kijker = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          navLinks.forEach((link) =>
+            link.setAttribute("aria-current", String(link.getAttribute("href") === `#${entry.target.id}`)),
+          );
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
+    secties.forEach((sectie) => kijker.observe(sectie));
+  }
+</script>

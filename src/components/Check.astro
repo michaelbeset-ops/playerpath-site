@@ -1,0 +1,14 @@
+---
+// Groen vinkje voor opsommingen. tone bepaalt of hij op licht of donker staat.
+interface Props {
+  tone?: "dark" | "light";
+}
+const { tone = "dark" } = Astro.props;
+const kleur = tone === "dark" ? "bg-accent-soft text-accent-deep" : "bg-white/10 text-accent";
+---
+
+<span class={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${kleur}`} aria-hidden="true">
+  <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+</span>

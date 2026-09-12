@@ -1,0 +1,147 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+
+// Het probleem naast de oplossing, rij voor rij. Zo ziet een bezoeker per
+// stuk gereedschap meteen wat ervoor in de plaats komt.
+const rijen = [
+  {
+    ding: "Excel",
+    taak: "Spelers en betalingen",
+    pijn: "Twee versies, en niemand weet welke de laatste is",
+    oplossing: "Eén administratie die altijd klopt",
+    paths: ["M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", "M3 9h18M3 15h18M9 3v18"],
+  },
+  {
+    ding: "WhatsApp",
+    taak: "Wijzigingen en afmeldingen",
+    pijn: "Belangrijke berichten verdwijnen in de groep",
+    oplossing: "Mededelingen per groep, afzeggen met één klik",
+    paths: ["M7.9 20A9 9 0 1 0 4 16.1L2 22z"],
+  },
+  {
+    ding: "Tikkie en de bank",
+    taak: "Contributie",
+    pijn: "Handmatig sturen, afvinken en najagen",
+    oplossing: "Incasso en herinneringen lopen vanzelf",
+    paths: ["M4 10h12", "M4 14h9", "M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"],
+  },
+  {
+    ding: "Mail",
+    taak: "Inschrijvingen",
+    pijn: "Gegevens overtypen, elke keer opnieuw",
+    oplossing: "Ouders schrijven zichzelf in via één link",
+    paths: ["M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z", "m22 7-10 6L2 7"],
+  },
+  {
+    ding: "Papier op het veld",
+    taak: "Aanwezigheid",
+    pijn: "Het briefje ligt thuis, of in de auto",
+    oplossing: "Afvinken op je telefoon, naast het veld",
+    paths: ["M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2", "M9 2h6v4H9z"],
+  },
+  {
+    ding: "Je hoofd",
+    taak: "Ontwikkeling",
+    pijn: "Op een ouderavond heb je geen enkel cijfer",
+    oplossing: "Een rapport in dertig seconden, ouders zien het direct",
+    paths: ["M9 18h6", "M10 22h4", "M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"],
+  },
+];
+---
+
+<section id="probleem" class="bg-white py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      eyebrow="Het probleem"
+      title="Zes losse dingen, of één systeem"
+      intro="De meeste voetbalscholen draaien op gereedschap dat nooit voor hen bedoeld was. Het werkt, tot je groeit."
+      class="reveal"
+    />
+
+    <div
+      class="reveal mt-12 overflow-hidden rounded-3xl border border-line bg-white shadow-[0_30px_70px_-45px_rgba(11,18,32,0.45)]"
+    >
+      <div class="hidden grid-cols-[15.5rem_1fr_1fr] text-[11px] font-semibold uppercase tracking-[0.14em] md:grid">
+        <div class="px-6 py-4 text-muted">Waarmee</div>
+        <div class="flex items-center gap-2 px-6 py-4 text-muted">
+          <span class="grid size-5 place-items-center rounded-full bg-[#fee2e2] text-[#dc2626]">
+            <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"></path>
+            </svg>
+          </span>
+          Hoe het nu gaat
+        </div>
+        <div class="flex items-center gap-2 bg-ink px-6 py-4 text-white">
+          <span class="grid size-5 place-items-center rounded-full bg-accent text-ink">
+            <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </span>
+          Met PlayerPath
+        </div>
+      </div>
+
+      <ul>
+        {
+          rijen.map((rij) => (
+            <li class="grid border-t border-line first:border-t-0 md:grid-cols-[15.5rem_1fr_1fr] md:first:border-t">
+              <div class="flex items-center gap-3 px-5 pt-5 md:px-6 md:py-4">
+                <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-tint text-ink/70">
+                  <svg
+                    class="size-[18px]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    {rij.paths.map((d) => (
+                      <path d={d} />
+                    ))}
+                  </svg>
+                </span>
+                <span>
+                  <span class="block text-[15px] font-semibold text-ink">{rij.ding}</span>
+                  <span class="block text-xs text-muted">{rij.taak}</span>
+                </span>
+              </div>
+
+              <div class="flex items-start gap-2.5 px-5 pt-3 text-sm leading-snug text-muted md:items-center md:px-6 md:py-4">
+                <svg
+                  class="mt-0.5 size-3.5 shrink-0 text-[#dc2626]/60 md:mt-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+                {rij.pijn}
+              </div>
+
+              <div class="mx-3 my-3 flex items-start gap-2.5 rounded-xl bg-accent-soft/80 px-3 py-2.5 text-sm font-medium leading-snug text-ink md:m-0 md:items-center md:rounded-none md:px-6 md:py-4">
+                <svg
+                  class="mt-0.5 size-4 shrink-0 text-accent-deep md:mt-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                {rij.oplossing}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

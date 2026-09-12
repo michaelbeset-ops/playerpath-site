@@ -1,0 +1,273 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+
+// Het volledige functieoverzicht, als tabbladen in plaats van een muur tekst.
+// Alle functies staan in de HTML (goed voor Google), je ziet er alleen één
+// onderdeel tegelijk.
+//
+// LET OP: houd dit gelijk met FEATURES.md van het platform.
+const blokken = [
+  {
+    titel: "Inschrijven",
+    tekst: "Van aanmelding tot compleet spelersdossier, zonder overtypen.",
+    pakket: "In elk pakket",
+    paths: ["M16 21v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V21", "M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M19 8v6M22 11h-6"],
+    punten: [
+      "Openbaar inschrijfformulier met je eigen link",
+      "Ouder kiest zelf het tarief dat past",
+      "Aanmeldingen komen in een inbox, jij keurt goed",
+      "Goedkeuren maakt speler, ouderaccount en abonnement in één keer aan",
+      "Spelers, ouders en trainers in één administratie",
+      "Trainers en ouders uitnodigen per e-mail",
+      "Rollen: eigenaar, trainer, ouder en speler zien elk hun eigen deel",
+      "Groepen per leeftijd of niveau",
+    ],
+  },
+  {
+    titel: "Betalingen",
+    tekst: "Geld binnenhalen zonder er zelf achteraan te zitten.",
+    pakket: "In elk pakket",
+    paths: ["M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z", "M2 10h20M6 15h4"],
+    punten: [
+      "iDEAL voor eenmalige betalingen",
+      "Doorlopende SEPA-incasso met machtiging",
+      "Een heel seizoen in termijnen betalen",
+      "Facturen gaan automatisch de deur uit",
+      "Herinnering bij te laat betalen, zonder dat jij eraan denkt",
+      "Storno's worden herkend en teruggemeld",
+      "Betaling start zodra je een inschrijving goedkeurt",
+      "Overzicht van ontvangen, openstaand en achterstallig",
+    ],
+  },
+  {
+    titel: "Rooster en veld",
+    tekst: "Eén agenda voor trainers en ouders, en een app die op het veld werkt.",
+    pakket: "In elk pakket",
+    paths: ["M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", "M8 2v4M16 2v4M3 10h18"],
+    punten: [
+      "Trainingen met datum, tijd, locatie en meerdere trainers",
+      "Wekelijks herhalen, één keer instellen",
+      "Maandweergave en weekweergave",
+      "Aanwezigheid afvinken op je telefoon, naast het veld",
+      "Ouders melden zelf af, apart vastgelegd van jouw afvinken",
+      "Opkomst per groep op je dashboard",
+      "Training afzeggen stuurt automatisch bericht naar de groep",
+      "Installeerbaar als app op de telefoon",
+      "Werkt door als de verbinding op het veld wegvalt",
+    ],
+  },
+  {
+    titel: "Ontwikkeling",
+    tekst: "Waar PlayerPath verschilt van gewone clubsoftware.",
+    pakket: "Pro en Ultimate",
+    paths: ["M3 17l6-6 4 4 7-7", "M17 8h4v4"],
+    punten: [
+      "Rapport in ongeveer dertig seconden: zes categorieën, één tik per cijfer",
+      "Voorgevuld met het vorige rapport, je past alleen aan wat wijzigt",
+      "Aparte categorieën voor keepers en veldspelers",
+      "Ontwikkelingsdoel per speler, met streefcijfer en einddatum",
+      "Op koers of achter, zichtbaar voor jou én de ouder",
+      "Voortgangsgrafiek per categorie over alle seizoenen",
+      "Kwartaal-terugblik per speler",
+      "Spelerskaart die groeit van brons naar elite, met badges",
+      "Deelbare kaart, met een grens aan wat een buitenstaander ziet",
+      "Bewust geen ranglijsten tussen spelers onderling",
+    ],
+  },
+  {
+    titel: "Ouders",
+    tekst: "Minder losse appjes, meer ouders die weten waar ze aan toe zijn.",
+    pakket: "Tijdlijn vanaf Pro",
+    paths: ["M4 5h16v11H8l-4 4z", "M8 9h8M8 12h5"],
+    punten: [
+      "Mededeling aan de hele school of aan één groep",
+      "Ouders zien de trainingen, aanwezigheid en kaart van hun kind",
+      "Tijdlijn met rapporten en mijlpalen",
+      "Melding zodra er een nieuw rapport klaarstaat",
+      "Maandelijkse samenvatting naar ouder en speler",
+      "Meldingsvoorkeuren per gebruiker",
+      "Verjaardagen van je spelers op het dashboard",
+    ],
+  },
+  {
+    titel: "Jouw merk",
+    tekst: "Het voelt als jouw school, niet als andermans software.",
+    pakket: "Ultimate",
+    paths: ["M12 3 3 8v8l9 5 9-5V8z", "M3 8l9 5 9-5M12 13v8"],
+    punten: [
+      "Je eigen logo en merkkleur door het hele systeem",
+      "Automatische contrastcorrectie, zodat tekst leesbaar blijft",
+      "Je eigen domein, zodat ouders nooit ons adres zien",
+      "E-mails gaan uit naam van jouw school",
+      "Meerdere vestigingen onder één account",
+      "Exports naar Excel of CSV: spelers, trainingen, aanwezigheid",
+      "Financieel werkboek met vier tabbladen voor je boekhouder",
+      "Verantwoordingsoverzicht voor een ouderavond, vereniging of gemeente",
+    ],
+  },
+];
+
+const totaal = blokken.reduce((som, blok) => som + blok.punten.length, 0);
+---
+
+<section id="alles" class="bg-white py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      eyebrow="Alles wat erin zit"
+      title="Geen sterretjes, geen kleine lettertjes"
+      intro={`${totaal} functies in zes onderdelen. Wat er niet in staat, beloven we ook niet.`}
+      class="reveal"
+    />
+
+    <div
+      class="reveal mt-12 grid gap-2 rounded-3xl border border-line bg-tint/70 p-2 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-3 lg:p-3"
+      data-tabs
+    >
+      <div
+        role="tablist"
+        aria-label="Onderdelen"
+        class="flex gap-1.5 overflow-x-auto [scrollbar-width:none] lg:flex-col lg:overflow-visible"
+      >
+        {
+          blokken.map((blok, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`functies-tab-${i}`}
+              aria-controls={`functies-paneel-${i}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              tabindex={i === 0 ? 0 : -1}
+              class="group flex shrink-0 items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors duration-200 hover:bg-white/70 aria-selected:bg-white aria-selected:shadow-[0_4px_16px_-8px_rgba(11,18,32,0.25)] lg:w-full"
+            >
+              <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-white text-accent-deep transition-colors duration-200 group-aria-selected:bg-ink group-aria-selected:text-accent">
+                <svg
+                  class="size-[18px]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  {blok.paths.map((d) => (
+                    <path d={d} />
+                  ))}
+                </svg>
+              </span>
+              <span class="min-w-0 pr-1">
+                <span class="block whitespace-nowrap text-sm font-semibold text-ink">{blok.titel}</span>
+                <span class="block whitespace-nowrap text-xs text-muted">{blok.punten.length} functies</span>
+              </span>
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        blokken.map((blok, i) => (
+          <div
+            role="tabpanel"
+            id={`functies-paneel-${i}`}
+            aria-labelledby={`functies-tab-${i}`}
+            hidden={i !== 0}
+            class="functies-paneel rounded-2xl bg-white p-6 shadow-[0_4px_20px_-12px_rgba(11,18,32,0.2)] sm:p-8 lg:p-10"
+          >
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h3 class="text-2xl font-semibold tracking-[-0.02em] text-ink">{blok.titel}</h3>
+                <p class="mt-1.5 text-pretty text-[15px] text-muted">{blok.tekst}</p>
+              </div>
+              <span
+                class={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
+                  blok.pakket === "In elk pakket" ? "bg-accent-soft text-accent-deep" : "bg-ink text-accent"
+                }`}
+              >
+                {blok.pakket}
+              </span>
+            </div>
+
+            <ul class="mt-8 grid gap-x-10 gap-y-3.5 border-t border-line pt-8 sm:grid-cols-2">
+              {blok.punten.map((punt) => (
+                <li class="flex items-start gap-3 text-[15px] leading-snug text-ink">
+                  <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-deep">
+                    <svg
+                      class="size-3"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  </span>
+                  {punt}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .functies-paneel:not([hidden]) {
+      animation: paneel-in 0.35s ease-out;
+    }
+  }
+
+  @keyframes paneel-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // Tabbladen met toetsenbord: pijltjes, Home en End, zoals een screenreader verwacht.
+  document.querySelectorAll<HTMLElement>("[data-tabs]").forEach((groep) => {
+    const tabs = [...groep.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panelen = [...groep.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+
+    const kies = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => {
+        const actief = i === index;
+        tab.setAttribute("aria-selected", String(actief));
+        tab.tabIndex = actief ? 0 : -1;
+        panelen[i].hidden = !actief;
+      });
+      if (focus) tabs[index].focus();
+      tabs[index].scrollIntoView({ block: "nearest", inline: "nearest" });
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => kies(i));
+      tab.addEventListener("keydown", (event) => {
+        const laatste = tabs.length - 1;
+        const doelen: Record<string, number> = {
+          ArrowDown: i === laatste ? 0 : i + 1,
+          ArrowRight: i === laatste ? 0 : i + 1,
+          ArrowUp: i === 0 ? laatste : i - 1,
+          ArrowLeft: i === 0 ? laatste : i - 1,
+          Home: 0,
+          End: laatste,
+        };
+        if (event.key in doelen) {
+          event.preventDefault();
+          kies(doelen[event.key], true);
+        }
+      });
+    });
+  });
+</script>

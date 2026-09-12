@@ -1,0 +1,627 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+// De spelerskaart als verzamelkaart, nagebouwd naar PlayerCardVisual.vue in
+// het platform. Zo ziet een bezoeker op de site precies de kaart die zijn
+// spelers straks krijgen.
+//
+// Het level zie je aan het frame: koper voor brons, chroom voor zilver, goud
+// met gloed, en een iriserend bewegend frame voor elite.
+//
+// Alle maten hangen aan één eenheid, --u. Zet op een ouder `--kaart-u` of geef
+// de prop `schaal` mee, en de hele kaart schaalt mee zonder te vervormen.
+type Tier = "brons" | "zilver" | "goud" | "elite";
+type Icoon = "ster" | "groei" | "doel" | "trofee" | "kalender" | "medaille";
+
+interface Props {
+  tier: Tier;
+  voornaam: string;
+  achternaam: string;
+  overall: number;
+  categorie: string;
+  cijfers: { label: string; waarde: number }[];
+  xp: number;
+  voortgang: number;
+  upgrade: string;
+  badges?: { label: string; icoon: Icoon }[];
+  foto?: ImageMetadata | null;
+  seizoen?: string;
+  school?: string;
+  schaal?: number;
+  class?: string;
+}
+
+const {
+  tier,
+  voornaam,
+  achternaam,
+  overall,
+  categorie,
+  cijfers,
+  xp,
+  voortgang,
+  upgrade,
+  badges = [],
+  foto = null,
+  seizoen = "25/26",
+  school,
+  schaal,
+  class: extra = "",
+} = Astro.props;
+
+const levelNaam = { brons: "Brons", zilver: "Zilver", goud: "Goud", elite: "Elite" }[tier];
+
+const iconen: Record<Icoon, string[]> = {
+  ster: ["m12 2 3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z"],
+  groei: ["M22 7 13.5 15.5 8.5 10.5 2 17", "M16 7h6v6"],
+  doel: [
+    "M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20",
+    "M12 6a6 6 0 1 0 0 12a6 6 0 1 0 0-12",
+    "M12 10a2 2 0 1 0 0 4a2 2 0 1 0 0-4",
+  ],
+  trofee: [
+    "M6 9H4.5a2.5 2.5 0 0 1 0-5H6",
+    "M18 9h1.5a2.5 2.5 0 0 0 0-5H18",
+    "M4 22h16",
+    "M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22",
+    "M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22",
+    "M18 2H6v7a6 6 0 0 0 12 0V2Z",
+  ],
+  kalender: [
+    "M8 2v4M16 2v4",
+    "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+    "M3 10h18",
+    "m9 16 2 2 4-4",
+  ],
+  medaille: [
+    "M7.2 15 2.7 7.1a2 2 0 0 1 .1-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.1a2 2 0 0 1 .1 2.2L16.8 15",
+    "M8 7h8",
+    "M12 12a5 5 0 1 0 0 10a5 5 0 1 0 0-10",
+  ],
+};
+
+const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
+---
+
+<div class={`pp-wrap pp-tier-${tier} ${extra}`} style={eenheid}>
+  <div class="pp-frame">
+    <div class="pp-frame-glans" aria-hidden="true"></div>
+
+    <div class="pp-binnen">
+      <div class="pp-foto-vak">
+        {
+          foto ? (
+            <Image
+              src={foto}
+              alt={`${voornaam} ${achternaam}`}
+              widths={[360, 720]}
+              sizes="360px"
+              class="pp-foto"
+            />
+          ) : (
+            <div class="pp-silhouet" aria-hidden="true">
+              <svg
+                class="pp-silhouet-icoon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              >
+                <circle cx="12" cy="8" r="5"></circle>
+                <path d="M20 21a8 8 0 0 0-16 0"></path>
+              </svg>
+            </div>
+          )
+        }
+
+        <div class="pp-foto-fade" aria-hidden="true"></div>
+
+        <p class="pp-merk">PlayerPath</p>
+
+        <div class="pp-overall-blok">
+          <p class="pp-overall">{overall}</p>
+          <p class="pp-positie">
+            <svg
+              class="pp-positie-icoon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 11V6a2 2 0 0 0-4 0"></path>
+              <path d="M14 10V4a2 2 0 0 0-4 0v2"></path>
+              <path d="M10 10.5V6a2 2 0 0 0-4 0v8"></path>
+              <path
+                d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
+              ></path>
+            </svg>
+            Keeper
+          </p>
+          <p class="pp-categorie">{categorie}</p>
+        </div>
+
+        {
+          badges.length > 0 && (
+            <ul class="pp-badges" aria-label="Mijlpalen">
+              {badges.slice(0, 3).map((badge) => (
+                <li class="pp-badge">
+                  <span class="pp-badge-icoon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      {iconen[badge.icoon].map((d) => (
+                        <path d={d} />
+                      ))}
+                    </svg>
+                  </span>
+                  <span class="pp-badge-label">{badge.label}</span>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      <div class="pp-body">
+        <div class="pp-patroon" aria-hidden="true"></div>
+
+        <div class="pp-naam">
+          <p class="pp-voornaam">{voornaam}</p>
+          <p class="pp-achternaam">{achternaam}</p>
+        </div>
+
+        <div class="pp-stats">
+          {
+            cijfers.map((c) => (
+              <div class="pp-stat">
+                <div class="pp-stat-regel">
+                  <span class="pp-stat-label">{c.label}</span>
+                  <span class="pp-stat-cijfer">{c.waarde}</span>
+                </div>
+                <div class="pp-balk">
+                  <div class="pp-balk-vulling" style={`width:${c.waarde}%`} />
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="pp-xp">
+          <div class="pp-xp-regel">
+            <span class="pp-xp-label">XP</span>
+            <span class="pp-xp-cijfer">{xp}</span>
+          </div>
+          <div class="pp-balk pp-balk-xp">
+            <div class="pp-balk-vulling" style={`width:${voortgang}%`}></div>
+          </div>
+          <p class="pp-xp-tekst">{upgrade}</p>
+        </div>
+
+        <div class="pp-voet">
+          <p class="pp-voet-regel">Seizoen {seizoen} &middot; Level {levelNaam}</p>
+          {school && <p class="pp-school">{school}</p>}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pp-wrap {
+    --u: var(--kaart-u, 1rem);
+    --pp-facet: var(--u);
+    --pp-rand: calc(var(--u) * 0.4);
+    --pp-surface-1: #131c30;
+    --pp-surface-2: #0a0f1c;
+    --pp-accent: #22e06b;
+    --pp-tekst: #f1f5f9;
+    --pp-tekst-zacht: #94a3b8;
+    --pp-tier: #94a3b8;
+    --pp-tier-zacht: rgba(148, 163, 184, 0.18);
+    --pp-gloed: rgba(148, 163, 184, 0.25);
+    --pp-metaal: linear-gradient(135deg, #cfd6de 0%, #8c96a3 20%, #4b5563 38%, #d9dfe6 52%, #7b8592 68%, #3f4650 84%, #b5bdc7 100%);
+
+    width: calc(var(--u) * 22.5);
+    max-width: 100%;
+    color: var(--pp-tekst);
+    font-variant-numeric: tabular-nums;
+    text-align: left;
+  }
+
+  .pp-wrap p {
+    margin: 0;
+  }
+
+  .pp-frame {
+    position: relative;
+    padding: var(--pp-rand);
+    background: var(--pp-metaal);
+    clip-path: polygon(
+      var(--pp-facet) 0,
+      calc(100% - var(--pp-facet)) 0,
+      100% var(--pp-facet),
+      100% calc(100% - var(--pp-facet)),
+      calc(100% - var(--pp-facet)) 100%,
+      var(--pp-facet) 100%,
+      0 calc(100% - var(--pp-facet)),
+      0 var(--pp-facet)
+    );
+    filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 22px var(--pp-gloed));
+  }
+
+  .pp-frame-glans {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.55) 44%, rgba(255, 255, 255, 0.1) 50%, transparent 58%),
+      radial-gradient(70% 40% at 10% 0%, rgba(255, 255, 255, 0.5), transparent 70%);
+    mix-blend-mode: soft-light;
+  }
+
+  .pp-binnen {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--pp-surface-1), var(--pp-surface-2));
+    clip-path: polygon(
+      calc(var(--pp-facet) - var(--pp-rand)) 0,
+      calc(100% - var(--pp-facet) + var(--pp-rand)) 0,
+      100% calc(var(--pp-facet) - var(--pp-rand)),
+      100% calc(100% - var(--pp-facet) + var(--pp-rand)),
+      calc(100% - var(--pp-facet) + var(--pp-rand)) 100%,
+      calc(var(--pp-facet) - var(--pp-rand)) 100%,
+      0 calc(100% - var(--pp-facet) + var(--pp-rand)),
+      0 calc(var(--pp-facet) - var(--pp-rand))
+    );
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .pp-foto-vak {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    background: radial-gradient(80% 60% at 50% 30%, var(--pp-tier-zacht), transparent 70%), var(--pp-surface-1);
+  }
+
+  .pp-foto-vak :global(.pp-foto) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .pp-silhouet {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100%;
+    padding-bottom: calc(var(--u) * 1.5);
+  }
+
+  .pp-silhouet-icoon {
+    width: calc(var(--u) * 5.5);
+    height: calc(var(--u) * 5.5);
+    color: var(--pp-tier);
+    opacity: 0.35;
+  }
+
+  .pp-foto-fade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(5, 8, 16, 0.55) 0%, transparent 40%),
+      linear-gradient(180deg, transparent 50%, var(--pp-surface-1) 100%);
+  }
+
+  .pp-merk {
+    position: absolute;
+    top: calc(var(--u) * 0.55);
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: calc(var(--u) * 0.5625);
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--pp-tier);
+    opacity: 0.9;
+  }
+
+  .pp-overall-blok {
+    position: absolute;
+    top: calc(var(--u) * 1.5);
+    left: calc(var(--u) * 1);
+    line-height: 1;
+  }
+
+  .pp-overall {
+    font-size: calc(var(--u) * 3.75);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    color: var(--pp-accent);
+    text-shadow:
+      0 2px 12px rgba(0, 0, 0, 0.6),
+      0 0 28px rgba(34, 224, 107, 0.35);
+  }
+
+  .pp-positie {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--u) * 0.3);
+    margin-top: calc(var(--u) * 0.4) !important;
+    font-size: calc(var(--u) * 0.6875);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pp-tier);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+  }
+
+  .pp-positie-icoon {
+    width: calc(var(--u) * 0.875);
+    height: calc(var(--u) * 0.875);
+  }
+
+  .pp-categorie {
+    margin-top: calc(var(--u) * 0.3) !important;
+    font-size: calc(var(--u) * 0.6875);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--pp-tekst);
+    opacity: 0.85;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+  }
+
+  .pp-badges {
+    position: absolute;
+    top: calc(var(--u) * 1.5);
+    right: calc(var(--u) * 0.85);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--u) * 0.5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--u) * 0.2);
+    width: calc(var(--u) * 3.75);
+  }
+
+  .pp-badge-icoon {
+    display: grid;
+    place-items: center;
+    width: calc(var(--u) * 1.9);
+    height: calc(var(--u) * 1.9);
+    border-radius: 999px;
+    color: var(--pp-surface-2);
+    background: var(--pp-metaal);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.35) inset,
+      0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .pp-badge-icoon svg {
+    width: calc(var(--u) * 0.875);
+    height: calc(var(--u) * 0.875);
+  }
+
+  .pp-badge-label {
+    max-width: 100%;
+    line-height: 1.15;
+    font-size: calc(var(--u) * 0.5625);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: var(--pp-tekst);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .pp-body {
+    position: relative;
+    padding: 0 calc(var(--u) * 1) calc(var(--u) * 0.9);
+  }
+
+  .pp-patroon {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 18px);
+  }
+
+  .pp-naam {
+    position: relative;
+    margin-top: calc(var(--u) * -0.25);
+    text-align: center;
+    line-height: 1.05;
+  }
+
+  .pp-voornaam {
+    font-size: calc(var(--u) * 0.75);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pp-tekst-zacht);
+  }
+
+  .pp-achternaam {
+    margin-top: calc(var(--u) * 0.15) !important;
+    font-size: calc(var(--u) * 1.625);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  .pp-stats {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--u) * 0.6) calc(var(--u) * 1.1);
+    margin-top: calc(var(--u) * 0.85);
+  }
+
+  .pp-stat-regel {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: calc(var(--u) * 0.5);
+  }
+
+  .pp-stat-label {
+    min-width: 0;
+    font-size: calc(var(--u) * 0.75);
+    font-weight: 500;
+    color: var(--pp-tekst-zacht);
+  }
+
+  .pp-stat-cijfer {
+    font-size: calc(var(--u) * 1.0625);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .pp-balk {
+    height: calc(var(--u) * 0.2);
+    margin-top: calc(var(--u) * 0.3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.09);
+    overflow: hidden;
+  }
+
+  .pp-balk-vulling {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--pp-accent), var(--pp-tier));
+  }
+
+  .pp-xp {
+    position: relative;
+    margin-top: calc(var(--u) * 0.9);
+    padding-top: calc(var(--u) * 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .pp-xp-regel {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .pp-xp-label {
+    font-size: calc(var(--u) * 0.625);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--pp-tier);
+  }
+
+  .pp-xp-cijfer {
+    font-size: calc(var(--u) * 0.8125);
+    font-weight: 700;
+    color: var(--pp-tier);
+  }
+
+  .pp-balk-xp {
+    height: calc(var(--u) * 0.3);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .pp-balk-xp .pp-balk-vulling {
+    background: var(--pp-metaal);
+  }
+
+  .pp-xp-tekst {
+    margin-top: calc(var(--u) * 0.35) !important;
+    font-size: calc(var(--u) * 0.75);
+    color: var(--pp-tekst-zacht);
+  }
+
+  .pp-voet {
+    position: relative;
+    margin-top: calc(var(--u) * 0.75);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .pp-voet-regel {
+    font-size: calc(var(--u) * 0.6875);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pp-tier);
+  }
+
+  .pp-school {
+    font-size: calc(var(--u) * 0.625);
+    color: var(--pp-tekst-zacht);
+  }
+
+  /* Levels: het metaal van het frame, gelijk aan het platform. */
+  .pp-tier-brons {
+    --pp-tier: #e0a370;
+    --pp-tier-zacht: rgba(214, 154, 91, 0.2);
+    --pp-gloed: rgba(214, 140, 80, 0.3);
+    --pp-metaal: linear-gradient(135deg, #f2b98a 0%, #b5651d 18%, #6b3a12 36%, #f0c39a 50%, #a9581a 66%, #5a2f0e 82%, #d98a4b 100%);
+  }
+
+  .pp-tier-zilver {
+    --pp-tier: #e2e9f0;
+    --pp-tier-zacht: rgba(219, 228, 238, 0.18);
+    --pp-gloed: rgba(219, 228, 238, 0.32);
+    --pp-metaal: linear-gradient(135deg, #ffffff 0%, #b9c3ce 18%, #5b6672 36%, #f4f7fa 50%, #9aa6b3 66%, #4a535d 82%, #dfe6ec 100%);
+  }
+
+  .pp-tier-goud {
+    --pp-tier: #f0cf6c;
+    --pp-tier-zacht: rgba(232, 199, 102, 0.22);
+    --pp-gloed: rgba(240, 200, 90, 0.5);
+    --pp-surface-1: #172038;
+    --pp-metaal: linear-gradient(135deg, #fbe28a 0%, #d4a72c 18%, #8a5c0a 36%, #fff0b3 50%, #c9961c 66%, #6e4a06 82%, #ecc95c 100%);
+  }
+
+  .pp-tier-elite {
+    --pp-tier: #f3e2a2;
+    --pp-tier-zacht: rgba(200, 190, 255, 0.22);
+    --pp-gloed: rgba(190, 170, 255, 0.45);
+    --pp-surface-1: #171432;
+    --pp-surface-2: #07070f;
+    --pp-metaal: linear-gradient(120deg, #e9e6ff 0%, #8fd3ff 11%, #4f4a9c 21%, #c8a2ff 32%, #ffb3e6 43%, #6b3f7c 53%, #fff2a8 63%, #a8ffd8 74%, #3f6b96 85%, #e9e6ff 100%);
+  }
+
+  .pp-tier-elite .pp-frame {
+    background-size: 300% 300%;
+    animation: pp-holo 9s ease-in-out infinite;
+  }
+
+  @keyframes pp-holo {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-tier-elite .pp-frame {
+      animation: none;
+    }
+  }
+</style>

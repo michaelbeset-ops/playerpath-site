@@ -1,0 +1,26 @@
+---
+// De balk van het echte PlayerPath-platform, zodat de schermen in de
+// featureblokken herkenbaar zijn als één product.
+interface Props {
+  actief: string;
+}
+const { actief } = Astro.props;
+const menu = ["Dashboard", "Agenda", "Klanten", "Ontwikkeling", "Financiën"];
+---
+
+<div class="flex items-center gap-1 overflow-hidden bg-ink px-3 py-2.5">
+  <span class="mr-2 grid size-6 shrink-0 place-items-center rounded-md bg-accent text-[9px] font-bold text-ink">
+    PP
+  </span>
+  {
+    menu.map((item) => (
+      <span
+        class={`rounded-md px-2.5 py-1.5 text-[11px] font-medium ${
+          item === actief ? "bg-white/10 text-white" : "text-white/55"
+        }`}
+      >
+        {item}
+      </span>
+    ))
+  }
+</div>

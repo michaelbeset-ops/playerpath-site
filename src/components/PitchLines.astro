@@ -1,0 +1,37 @@
+---
+// De lijnen van een voetbalveld, heel vaag achter de hero.
+// Maten volgen een echt veld van 105 bij 68 meter (1 meter = 10 eenheden),
+// zodat middencirkel, strafschopgebied en de boog kloppen.
+interface Props {
+  class?: string;
+}
+
+const { class: extra = "" } = Astro.props;
+---
+
+<svg
+  class={`pointer-events-none absolute inset-0 h-full w-full ${extra}`}
+  viewBox="0 0 1050 680"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.4"
+  aria-hidden="true"
+>
+  <rect x="25" y="25" width="1000" height="630" rx="2"></rect>
+  <path d="M525 25v630"></path>
+  <circle cx="525" cy="340" r="91.5"></circle>
+  <circle cx="525" cy="340" r="3" fill="currentColor"></circle>
+
+  <rect x="25" y="138.5" width="165" height="403"></rect>
+  <rect x="25" y="248.5" width="55" height="183"></rect>
+  <circle cx="135" cy="340" r="3" fill="currentColor"></circle>
+  <path d="M190 266.9A91.5 91.5 0 0 1 190 413.1"></path>
+
+  <rect x="860" y="138.5" width="165" height="403"></rect>
+  <rect x="970" y="248.5" width="55" height="183"></rect>
+  <circle cx="915" cy="340" r="3" fill="currentColor"></circle>
+  <path d="M860 266.9A91.5 91.5 0 0 0 860 413.1"></path>
+
+  <path d="M25 35a10 10 0 0 0 10-10M1015 25a10 10 0 0 0 10 10M1025 645a10 10 0 0 0-10 10M35 655a10 10 0 0 0-10-10"></path>
+</svg>

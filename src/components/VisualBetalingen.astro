@@ -1,0 +1,107 @@
+---
+import AppChrome from "./AppChrome.astro";
+
+// Nagebouwd naar het echte scherm /payments van PlayerPath,
+// met de gegevens van de voorbeeldschool "Keepersschool Rob".
+const kaarten = [
+  { label: "Ontvangen", bedrag: "\u20ac 82,50", meta: "deze maand, betaalde facturen", tint: "groen" },
+  { label: "Openstaand", bedrag: "\u20ac 422,50", meta: "5 facturen", tint: "oranje" },
+  { label: "Achterstallig", bedrag: "\u20ac 395,00", meta: "4 over de vervaldatum", tint: "oranje" },
+];
+
+const regels = [
+  { naam: "Liam Bakker", omschrijving: "Keeperstraining september", bedrag: "\u20ac 27,50", status: "Betaald" },
+  { naam: "Noor Visser", omschrijving: "Keeperstraining september", bedrag: "\u20ac 27,50", status: "Betaald" },
+  { naam: "Youssef El Amrani", omschrijving: "Seizoen 25/26", bedrag: "\u20ac 320,00", status: "Openstaand" },
+  { naam: "Sam de Boer", omschrijving: "Keeperstraining september", bedrag: "\u20ac 27,50", status: "Betaald" },
+];
+
+const tabs = ["Ontvangen", "Openstaand", "Te laat", "Gepland", "Alles"];
+---
+
+<div
+  class="overflow-hidden rounded-2xl border border-line bg-white shadow-xl shadow-ink/8"
+  aria-hidden="true"
+>
+  <AppChrome actief="Financiën" />
+
+  <div class="p-5 sm:p-6">
+    <p class="text-lg font-semibold tracking-tight text-ink">Betalingen</p>
+    <p class="mt-0.5 text-xs text-muted">Wat er binnenkomt, wat openstaat en wat misgaat.</p>
+
+    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+      {
+        kaarten.map((k) => (
+          <div class="overflow-hidden rounded-xl border border-line">
+            <div
+              class={`h-1 ${k.tint === "groen" ? "bg-accent-deep" : "bg-[#d97706]"}`}
+            />
+            <div class="p-3">
+              <p class="text-[11px] font-medium text-muted">{k.label}</p>
+              <p
+                class={`mt-1 text-xl font-semibold tracking-tight ${
+                  k.tint === "groen" ? "text-accent-deep" : "text-[#b45309]"
+                }`}
+              >
+                {k.bedrag}
+              </p>
+              <p class="mt-1 text-[10px] leading-tight text-muted">{k.meta}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-1 rounded-lg border border-line p-1">
+      {
+        tabs.map((tab) => (
+          <span
+            class={`rounded-md px-2.5 py-1.5 text-[11px] font-semibold ${
+              tab === "Alles" ? "bg-accent-deep text-white" : "text-muted"
+            }`}
+          >
+            {tab}
+          </span>
+        ))
+      }
+    </div>
+
+    <div class="mt-4 overflow-hidden rounded-xl border border-line">
+      <div class="flex items-baseline justify-between bg-tint px-4 py-2.5">
+        <p class="text-[11px] font-semibold text-ink">
+          Totaal <span class="font-normal text-muted">(8)</span>
+        </p>
+        <p class="text-[11px] font-semibold tabular-nums text-ink">
+          &euro; 505,00
+          <span class="ml-1.5 font-normal text-muted">btw &euro; 87,64</span>
+        </p>
+      </div>
+
+      <div class="divide-y divide-line">
+        {
+          regels.map((r) => (
+            <div class="flex items-center gap-3 px-4 py-3">
+              <span class="grid size-7 shrink-0 place-items-center rounded-full bg-tint text-[10px] font-semibold text-ink">
+                {r.naam.charAt(0)}
+              </span>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-semibold text-ink">{r.naam}</p>
+                <p class="truncate text-[11px] text-muted">{r.omschrijving}</p>
+              </div>
+              <p class="shrink-0 text-[13px] font-semibold tabular-nums text-ink">{r.bedrag}</p>
+              <span
+                class={`w-20 shrink-0 rounded-md px-2 py-1 text-center text-[10px] font-semibold ${
+                  r.status === "Betaald"
+                    ? "bg-accent-soft text-accent-deep"
+                    : "bg-[#fff4e5] text-[#b45309]"
+                }`}
+              >
+                {r.status}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

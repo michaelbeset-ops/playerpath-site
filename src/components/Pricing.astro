@@ -1,0 +1,305 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import Button from "./Button.astro";
+
+// Prijzen en doelgroepen zoals Michael ze op 11-9-2026 vastlegde, excl. btw.
+// LET OP: App\Enums\Package in het platform staat nog op 79/129/229. Trek die gelijk.
+//
+// Elke kaart noemt alleen wat er bíj komt ten opzichte van het pakket eronder.
+// Wie alles naast elkaar wil zien, klapt de vergelijking open.
+const pakketten = [
+  {
+    naam: "Basic",
+    prijs: 89,
+    doelgroep: "Kleine scholen",
+    omschrijving: "De administratie de deur uit.",
+    kop: "Wat je krijgt",
+    punten: [
+      "Online inschrijvingen met je eigen link",
+      "Betalingen, incasso en facturen",
+      "Ledenbeheer met rollen",
+      "Rooster en aanwezigheid",
+      "Mededelingen aan ouders",
+      "App op de telefoon",
+    ],
+    uitgelicht: false,
+  },
+  {
+    naam: "Pro",
+    prijs: 119,
+    doelgroep: "Groeiende scholen",
+    omschrijving: "Maak de ontwikkeling van elke speler zichtbaar.",
+    kop: "Alles van Basic, plus",
+    punten: [
+      "Spelerskaarten met levels en badges",
+      "Beoordelingen in dertig seconden",
+      "Ontwikkelingsdoelen per speler",
+      "Voortgang en tijdlijn voor ouders",
+    ],
+    uitgelicht: true,
+  },
+  {
+    naam: "Ultimate",
+    prijs: 249,
+    doelgroep: "Grote voetbalscholen",
+    omschrijving: "Onder je eigen naam, over al je vestigingen.",
+    kop: "Alles van Pro, plus",
+    punten: [
+      "White label: je eigen logo en kleuren",
+      "Je eigen domein",
+      "Meerdere vestigingen onder één account",
+      "Exports en financieel werkboek",
+    ],
+    uitgelicht: false,
+  },
+];
+
+const groepen = [
+  {
+    naam: "De basis",
+    rijen: [
+      { functie: "Online inschrijvingen en aanmeldingen-inbox", in: [true, true, true] },
+      { functie: "Betalingen, incasso, facturen en herinneringen", in: [true, true, true] },
+      { functie: "Ledenbeheer met rollen", in: [true, true, true] },
+      { functie: "Rooster, trainers en aanwezigheid", in: [true, true, true] },
+      { functie: "Mededelingen aan school of groep", in: [true, true, true] },
+      { functie: "App op de telefoon", in: [true, true, true] },
+    ],
+  },
+  {
+    naam: "Ontwikkeling",
+    rijen: [
+      { functie: "Spelerskaarten met levels en badges", in: [false, true, true] },
+      { functie: "Beoordelingen per categorie", in: [false, true, true] },
+      { functie: "Ontwikkelingsdoelen en voortgang", in: [false, true, true] },
+      { functie: "Tijdlijn en maandoverzicht voor ouders", in: [false, true, true] },
+    ],
+  },
+  {
+    naam: "Jouw merk en schaal",
+    rijen: [
+      { functie: "White label: eigen logo en kleuren", in: [false, false, true] },
+      { functie: "Eigen domein", in: [false, false, true] },
+      { functie: "Meerdere vestigingen", in: [false, false, true] },
+      { functie: "Exports en financieel werkboek", in: [false, false, true] },
+    ],
+  },
+];
+---
+
+<section id="prijs" class="bg-white py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      eyebrow="Tarieven"
+      title="Kies wat past bij de grootte van je school"
+      intro="Eén bedrag per maand. Geen kosten per speler, geen opstartkosten, maandelijks opzegbaar."
+      class="reveal"
+    />
+
+    <div class="mt-14 grid gap-5 lg:grid-cols-3 lg:items-stretch">
+      {
+        pakketten.map((p, i) => (
+          <div
+            class={`reveal relative flex flex-col rounded-3xl p-7 sm:p-8 ${
+              p.uitgelicht
+                ? "bg-ink text-white shadow-[0_40px_100px_-35px_rgba(11,18,32,0.7)] ring-1 ring-accent/30"
+                : "border border-line bg-white"
+            }`}
+            style={`transition-delay:${i * 90}ms`}
+          >
+            {p.uitgelicht && (
+              <div
+                class="pointer-events-none absolute inset-x-8 -top-px h-px bg-gradient-to-r from-transparent via-accent to-transparent"
+                aria-hidden="true"
+              />
+            )}
+
+            <div class="flex items-center justify-between gap-3">
+              <p class={`text-xl font-semibold tracking-tight ${p.uitgelicht ? "text-white" : "text-ink"}`}>
+                {p.naam}
+              </p>
+              <span
+                class={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  p.uitgelicht ? "bg-accent text-ink" : "bg-tint text-muted"
+                }`}
+              >
+                {p.uitgelicht ? `${p.doelgroep} · aanbevolen` : p.doelgroep}
+              </span>
+            </div>
+
+            <p class={`mt-2 text-[15px] ${p.uitgelicht ? "text-white/60" : "text-muted"}`}>{p.omschrijving}</p>
+
+            <div class="mt-7 flex items-end gap-2">
+              <span
+                class={`text-5xl font-semibold leading-none tracking-[-0.04em] ${p.uitgelicht ? "text-white" : "text-ink"}`}
+              >
+                &euro;{p.prijs}
+              </span>
+              <span class={`pb-1 text-sm ${p.uitgelicht ? "text-white/50" : "text-muted"}`}>
+                per maand, excl. btw
+              </span>
+            </div>
+
+            <div class="mt-7">
+              <Button
+                href="#proef-aanvragen"
+                variant={p.uitgelicht ? "accent" : "light"}
+                class={p.uitgelicht ? "w-full justify-between" : "w-full justify-between ring-1 ring-line"}
+              >
+                Plan een demo
+              </Button>
+            </div>
+
+            <div class={`mt-8 border-t pt-7 ${p.uitgelicht ? "border-white/10" : "border-line"}`}>
+              <p
+                class={`text-[11px] font-semibold uppercase tracking-[0.14em] ${
+                  p.uitgelicht ? "text-white/45" : "text-muted"
+                }`}
+              >
+                {p.kop}
+              </p>
+              <ul class="mt-4 space-y-3">
+                {p.punten.map((punt) => (
+                  <li class={`flex items-start gap-3 text-[15px] leading-snug ${p.uitgelicht ? "text-white/90" : "text-ink"}`}>
+                    <span
+                      class={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${
+                        p.uitgelicht ? "bg-accent/15 text-accent" : "bg-accent-soft text-accent-deep"
+                      }`}
+                    >
+                      <svg
+                        class="size-3"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    </span>
+                    {punt}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <details class="vergelijk group reveal mt-10">
+      <summary
+        class="mx-auto flex w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-sm transition-colors duration-200 hover:border-accent/40"
+      >
+        <span class="group-open:hidden">Vergelijk alle functies</span>
+        <span class="hidden group-open:inline">Vergelijking sluiten</span>
+        <svg
+          class="size-4 text-muted transition-transform duration-300 group-open:rotate-180"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </summary>
+
+      <div class="mt-8 overflow-x-auto rounded-3xl border border-line">
+        <table class="w-full min-w-[34rem] border-collapse text-left">
+          <thead>
+            <tr>
+              <th scope="col" class="px-6 py-5 text-sm font-semibold text-ink">
+                <span class="sr-only">Functie</span>
+              </th>
+              {
+                pakketten.map((p) => (
+                  <th
+                    scope="col"
+                    class={`w-28 px-3 py-5 text-center text-sm font-semibold sm:w-36 ${
+                      p.uitgelicht ? "bg-ink text-white" : "text-ink"
+                    }`}
+                  >
+                    {p.naam}
+                    <span class={`block text-xs font-normal ${p.uitgelicht ? "text-white/50" : "text-muted"}`}>
+                      &euro;{p.prijs} p/m
+                    </span>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          {
+            groepen.map((groep) => (
+              <tbody>
+                <tr>
+                  <th
+                    scope="colgroup"
+                    colspan="4"
+                    class="border-t border-line bg-tint/70 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted"
+                  >
+                    {groep.naam}
+                  </th>
+                </tr>
+                {groep.rijen.map((rij) => (
+                  <tr class="border-t border-line/70">
+                    <th scope="row" class="px-6 py-3.5 text-[15px] font-normal text-ink">
+                      {rij.functie}
+                    </th>
+                    {rij.in.map((aan, k) => (
+                      <td class={`px-3 py-3.5 text-center ${pakketten[k].uitgelicht ? "bg-ink/[0.03]" : ""}`}>
+                        {aan ? (
+                          <svg
+                            class="mx-auto size-[18px] text-accent-deep"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            role="img"
+                            aria-label="Inbegrepen"
+                          >
+                            <path d="M20 6 9 17l-5-5" />
+                          </svg>
+                        ) : (
+                          <span class="mx-auto block h-px w-3 bg-line" role="img" aria-label="Niet inbegrepen" />
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            ))
+          }
+        </table>
+      </div>
+    </details>
+
+    <p class="reveal mt-8 text-center text-sm text-muted">
+      Twijfel je? Begin bij het kleinste pakket. Overstappen kan elke maand, en je raakt niets kwijt.
+    </p>
+  </div>
+</section>
+
+<style>
+  .vergelijk {
+    interpolate-size: allow-keywords;
+  }
+
+  .vergelijk::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.4s ease,
+      content-visibility 0.4s allow-discrete;
+  }
+
+  .vergelijk[open]::details-content {
+    block-size: auto;
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+
+// Drie stappen, elk met een klein voorbeeld van wat je dan echt ziet.
+// Een tekstje "zet je school op" overtuigt niemand; een checklist die op
+// vier van vier staat wel.
+const stappen = [
+  {
+    titel: "Zet je school op",
+    tekst: "Groepen, locaties, trainers en tarieven. Heb je al lijsten in Excel, dan zetten we die voor je om.",
+    moment: "Binnen een uur",
+    soort: "checklist",
+  },
+  {
+    titel: "Deel je inschrijflink",
+    tekst: "Ouders schrijven hun kind in, kiezen een groep en rekenen direct af. Vol is vol, de rest komt op de wachtlijst.",
+    moment: "Eén link",
+    soort: "link",
+  },
+  {
+    titel: "Volg elke speler",
+    tekst: "Op het veld vink je aanwezigheid af en vul je een rapport in. Zo bouwt elke speler een compleet beeld op.",
+    moment: "Elke training",
+    soort: "groei",
+  },
+];
+---
+
+<section id="hoe-het-werkt" class="bg-tint py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      eyebrow="Hoe het werkt"
+      title="In drie stappen live"
+      intro="Je hoeft geen ICT'er te zijn. We zetten je school samen op."
+      class="reveal"
+    />
+
+    <ol class="mt-14 grid gap-5 lg:grid-cols-3 lg:gap-6 [&>*]:min-w-0">
+      {
+        stappen.map((stap, i) => (
+          <li
+            class="reveal relative flex flex-col rounded-3xl border border-line bg-white p-6 shadow-[0_20px_50px_-35px_rgba(11,18,32,0.35)] sm:p-7"
+            style={`transition-delay:${i * 90}ms`}
+          >
+            {i < stappen.length - 1 && (
+              <span
+                class="absolute -right-[1.15rem] top-1/2 z-10 hidden size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-white text-accent-deep shadow-sm lg:grid"
+                aria-hidden="true"
+              >
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            )}
+
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold tabular-nums text-accent-deep">
+                Stap {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="flex items-center gap-1.5 rounded-full bg-tint px-2.5 py-1 text-xs font-medium text-muted">
+                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
+                {stap.moment}
+              </span>
+            </div>
+
+            <h3 class="mt-5 text-xl font-semibold tracking-[-0.02em] text-ink">{stap.titel}</h3>
+            <p class="mt-2 flex-1 text-pretty text-[15px] leading-relaxed text-muted">{stap.tekst}</p>
+
+            <div class="mt-6 rounded-2xl border border-line bg-tint/60 p-4" aria-hidden="true">
+              {stap.soort === "checklist" && (
+                <>
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="font-semibold text-ink">Je school inrichten</span>
+                    <span class="font-semibold text-accent-deep">4 van 4</span>
+                  </div>
+                  <div class="mt-2 h-1.5 rounded-full bg-accent-deep" />
+                  <ul class="mt-3 grid grid-cols-2 gap-1.5">
+                    {["Groepen", "Locaties", "Trainers", "Tarieven"].map((item) => (
+                      <li class="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-medium text-ink">
+                        <svg class="size-3 text-accent-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {stap.soort === "link" && (
+                <>
+                  <div class="flex items-center gap-2 rounded-lg bg-white px-3 py-2 ring-1 ring-line">
+                    <svg class="size-3.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
+                      <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
+                    </svg>
+                    <span class="min-w-0 flex-1 truncate text-xs text-muted">
+                      app.playerpath.nl/inschrijven/keepersschool-rob
+                    </span>
+                    <span class="shrink-0 rounded-md bg-ink px-2 py-1 text-[10px] font-semibold text-white">
+                      Kopieer
+                    </span>
+                  </div>
+                  <div class="mt-3 flex items-center gap-2.5">
+                    <div class="flex -space-x-1.5">
+                      {["LB", "NV", "SB"].map((letters) => (
+                        <span class="grid size-6 place-items-center rounded-full bg-ink text-[9px] font-semibold text-accent ring-2 ring-white">
+                          {letters}
+                        </span>
+                      ))}
+                    </div>
+                    <span class="text-xs text-muted">
+                      <span class="font-semibold text-ink">3 nieuwe aanmeldingen</span> wachten op jou
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {stap.soort === "groei" && (
+                <>
+                  <div class="flex items-baseline justify-between text-xs">
+                    <span class="font-semibold text-ink">Youssef El Amrani</span>
+                    <span class="font-semibold text-accent-deep">+6 dit seizoen</span>
+                  </div>
+                  <div class="mt-3 flex h-[3.25rem] items-end gap-1.5">
+                    {[48, 55, 52, 63, 67, 74, 82].map((hoogte, j) => (
+                      <span
+                        class={`flex-1 rounded-t-md ${j === 6 ? "bg-accent-deep" : "bg-accent-deep/35"}`}
+                        style={`height:${hoogte}%`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
