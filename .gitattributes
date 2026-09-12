@@ -1,0 +1,3 @@
+# Regeleindes altijd als LF opslaan, ook op Windows.
+# Zonder dit lijkt elk bestand gewijzigd zodra iemand anders het opent.
+* text=auto eol=lf
