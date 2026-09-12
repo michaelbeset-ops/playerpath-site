@@ -10,7 +10,7 @@ import { kaarten } from "../data/spelers";
 // De hero: tekst links, het product rechts, allebei in het eerste scherm.
 // Het dashboard kantelt licht naar achteren en loopt over de rand van de
 // pagina, zodat het voelt als een echt product in plaats van een plaatje.
-const goud = kaarten.find((kaart) => kaart.tier === "goud")!;
+const goud = kaarten.find((kaart) => kaart.level === "goud")!;
 
 const feiten = [
   { waarde: "€89", label: "vanaf per maand" },
@@ -153,7 +153,7 @@ const feiten = [
       <div
         class="hero-kaart absolute -bottom-14 left-2 z-10 hidden -rotate-6 [--kaart-u:0.42rem] sm:block lg:-left-10 lg:[--kaart-u:0.5rem] xl:[--kaart-u:0.56rem]"
       >
-        <CollectibleCard {...goud} />
+        <CollectibleCard kaart={goud} />
       </div>
     </div>
   </div>

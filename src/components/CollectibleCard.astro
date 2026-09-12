@@ -1,171 +1,112 @@
 ---
+import "@fontsource-variable/inter";
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
-// De spelerskaart als verzamelkaart, nagebouwd naar PlayerCardVisual.vue in
-// het platform. Zo ziet een bezoeker op de site precies de kaart die zijn
-// spelers straks krijgen.
+// De spelerskaart zoals het platform hem toont, overgenomen uit de embed van
+// PlayerPath (app.playerpath.nl/embed/spelerskaart.html). Hier al bij het
+// bouwen als HTML gerenderd in plaats van met JavaScript in de browser:
+// sneller, en leesbaar voor Google.
 //
-// Het level zie je aan het frame: koper voor brons, chroom voor zilver, goud
-// met gloed, en een iriserend bewegend frame voor elite.
-//
-// Alle maten hangen aan één eenheid, --u. Zet op een ouder `--kaart-u` of geef
-// de prop `schaal` mee, en de hele kaart schaalt mee zonder te vervormen.
-type Tier = "brons" | "zilver" | "goud" | "elite";
-type Icoon = "ster" | "groei" | "doel" | "trofee" | "kalender" | "medaille";
+// Alle maten hangen aan --u. Zet op een ouder `--kaart-u` en de hele kaart
+// schaalt mee zonder te vervormen.
+export interface Kaart {
+  first_name: string;
+  last_name: string;
+  position: "keeper" | "field";
+  age_category?: string;
+  overall: number | null;
+  level: "brons" | "zilver" | "goud" | "elite";
+  xp: number;
+  /** Percentage van de XP-balk. */
+  progress: number;
+  /** Weglaten betekent: geen rugnummer. */
+  shirt_number?: number;
+  season: string;
+  school?: string;
+  card_number?: string;
+  /** [label, cijfer, verschil met vorig rapport] */
+  categories: [string, number, number][];
+  /** [icoon, label] */
+  badges: [string, string][];
+  foto?: ImageMetadata | null;
+}
 
 interface Props {
-  tier: Tier;
-  voornaam: string;
-  achternaam: string;
-  overall: number;
-  categorie: string;
-  cijfers: { label: string; waarde: number }[];
-  xp: number;
-  voortgang: number;
-  upgrade: string;
-  badges?: { label: string; icoon: Icoon }[];
-  foto?: ImageMetadata | null;
-  seizoen?: string;
-  school?: string;
-  schaal?: number;
+  kaart: Kaart;
   class?: string;
 }
 
-const {
-  tier,
-  voornaam,
-  achternaam,
-  overall,
-  categorie,
-  cijfers,
-  xp,
-  voortgang,
-  upgrade,
-  badges = [],
-  foto = null,
-  seizoen = "25/26",
-  school,
-  schaal,
-  class: extra = "",
-} = Astro.props;
+const { kaart: k, class: extra = "" } = Astro.props;
 
-const levelNaam = { brons: "Brons", zilver: "Zilver", goud: "Goud", elite: "Elite" }[tier];
-
-const iconen: Record<Icoon, string[]> = {
-  ster: ["m12 2 3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z"],
-  groei: ["M22 7 13.5 15.5 8.5 10.5 2 17", "M16 7h6v6"],
-  doel: [
-    "M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20",
-    "M12 6a6 6 0 1 0 0 12a6 6 0 1 0 0-12",
-    "M12 10a2 2 0 1 0 0 4a2 2 0 1 0 0-4",
-  ],
-  trofee: [
-    "M6 9H4.5a2.5 2.5 0 0 1 0-5H6",
-    "M18 9h1.5a2.5 2.5 0 0 0 0-5H18",
-    "M4 22h16",
-    "M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22",
-    "M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22",
-    "M18 2H6v7a6 6 0 0 0 12 0V2Z",
-  ],
-  kalender: [
-    "M8 2v4M16 2v4",
-    "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
-    "M3 10h18",
-    "m9 16 2 2 4-4",
-  ],
-  medaille: [
-    "M7.2 15 2.7 7.1a2 2 0 0 1 .1-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.1a2 2 0 0 1 .1 2.2L16.8 15",
-    "M8 7h8",
-    "M12 12a5 5 0 1 0 0 10a5 5 0 1 0 0-10",
-  ],
+const ICONS: Record<string, string> = {
+  trending: '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  trophy:
+    '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  hand: '<path d="M18 11V6a2 2 0 0 0-4 0v1"/><path d="M14 10V4a2 2 0 0 0-4 0v2"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+  shirt:
+    '<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>',
+  user: '<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
 };
 
-const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
+const LEVELS: Record<string, string> = { brons: "Brons", zilver: "Zilver", goud: "Goud", elite: "Elite", geen: "" };
+const NEXT: Record<string, number> = { brons: 150, zilver: 400, goud: 900 };
+
+const tier = k.overall == null ? "geen" : k.level;
+const keeper = k.position === "keeper";
+const volgende = NEXT[tier];
+const xpTekst =
+  k.overall == null
+    ? "Je eerste rapport zet de kaart aan"
+    : volgende
+      ? `Nog ${Math.max(0, volgende - (k.xp || 0))} punten tot je volgende upgrade`
+      : "Het hoogste level bereikt";
+const icoon = (naam: string) => ICONS[naam] ?? ICONS.trophy;
 ---
 
-<div class={`pp-wrap pp-tier-${tier} ${extra}`} style={eenheid}>
+<div class={`pp-kaart pp-wrap pp-tier-${tier} pp-${keeper ? "keeper" : "field"} ${extra}`}>
   <div class="pp-frame">
     <div class="pp-frame-glans" aria-hidden="true"></div>
+    <div class="pp-frame-licht" aria-hidden="true"></div>
 
     <div class="pp-binnen">
       <div class="pp-foto-vak">
         {
-          foto ? (
-            <Image
-              src={foto}
-              alt={`${voornaam} ${achternaam}`}
-              widths={[360, 720]}
-              sizes="360px"
-              class="pp-foto"
-            />
+          k.foto ? (
+            <Image src={k.foto} alt="" widths={[360, 720]} sizes="360px" class="pp-foto" />
           ) : (
-            <div class="pp-silhouet" aria-hidden="true">
-              <svg
-                class="pp-silhouet-icoon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              >
-                <circle cx="12" cy="8" r="5"></circle>
-                <path d="M20 21a8 8 0 0 0-16 0"></path>
-              </svg>
+            <div class="pp-silhouet">
+              <span class="pp-silhouet-icoon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={icoon("user")} />
+              </span>
             </div>
           )
         }
-
         <div class="pp-foto-fade" aria-hidden="true"></div>
-
         <p class="pp-merk">PlayerPath</p>
 
         <div class="pp-overall-blok">
-          <p class="pp-overall">{overall}</p>
+          <p class="pp-overall tabular">{k.overall ?? "—"}</p>
           <p class="pp-positie">
-            <svg
-              class="pp-positie-icoon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M18 11V6a2 2 0 0 0-4 0"></path>
-              <path d="M14 10V4a2 2 0 0 0-4 0v2"></path>
-              <path d="M10 10.5V6a2 2 0 0 0-4 0v8"></path>
-              <path
-                d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
-              ></path>
-            </svg>
-            Keeper
+            <svg viewBox="0 0 24 24" aria-hidden="true" set:html={icoon(keeper ? "hand" : "shirt")} />
+            {keeper ? "Keeper" : "Veldspeler"}
           </p>
-          <p class="pp-categorie">{categorie}</p>
+          {k.age_category && <p class="pp-categorie">{k.age_category}</p>}
         </div>
 
+        {k.shirt_number && <p class="pp-rugnummer tabular">{k.shirt_number}</p>}
+
         {
-          badges.length > 0 && (
+          k.badges.length > 0 && (
             <ul class="pp-badges" aria-label="Mijlpalen">
-              {badges.slice(0, 3).map((badge) => (
+              {k.badges.slice(0, 3).map(([naam, label]) => (
                 <li class="pp-badge">
                   <span class="pp-badge-icoon">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      {iconen[badge.icoon].map((d) => (
-                        <path d={d} />
-                      ))}
-                    </svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" set:html={icoon(naam)} />
                   </span>
-                  <span class="pp-badge-label">{badge.label}</span>
+                  <span class="pp-badge-label">{label}</span>
                 </li>
               ))}
             </ul>
@@ -177,56 +118,113 @@ const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
         <div class="pp-patroon" aria-hidden="true"></div>
 
         <div class="pp-naam">
-          <p class="pp-voornaam">{voornaam}</p>
-          <p class="pp-achternaam">{achternaam}</p>
+          <p class="pp-voornaam">{k.first_name}</p>
+          <p class="pp-achternaam">{k.last_name}</p>
         </div>
 
-        <div class="pp-stats">
-          {
-            cijfers.map((c) => (
-              <div class="pp-stat">
-                <div class="pp-stat-regel">
-                  <span class="pp-stat-label">{c.label}</span>
-                  <span class="pp-stat-cijfer">{c.waarde}</span>
+        {
+          k.overall == null ? (
+            <p class="pp-leeg">Zodra het eerste rapport binnen is, komt deze kaart tot leven.</p>
+          ) : (
+            <div class="pp-stats">
+              {k.categories.map(([label, cijfer, verschil]) => (
+                <div class="pp-stat">
+                  <div class="pp-stat-regel">
+                    <span class="pp-stat-label">{label}</span>
+                    {verschil !== 0 && (
+                      <span class={`pp-delta tabular ${verschil > 0 ? "pp-delta-op" : "pp-delta-af"}`}>
+                        {verschil > 0 ? `▲${verschil}` : `▼${Math.abs(verschil)}`}
+                      </span>
+                    )}
+                    <span class="pp-stat-cijfer tabular">{cijfer}</span>
+                  </div>
+                  <div class="pp-balk">
+                    <div class="pp-balk-vulling" style={`width:${cijfer}%`} />
+                  </div>
                 </div>
-                <div class="pp-balk">
-                  <div class="pp-balk-vulling" style={`width:${c.waarde}%`} />
-                </div>
-              </div>
-            ))
-          }
-        </div>
+              ))}
+            </div>
+          )
+        }
 
         <div class="pp-xp">
           <div class="pp-xp-regel">
             <span class="pp-xp-label">XP</span>
-            <span class="pp-xp-cijfer">{xp}</span>
+            <span class="pp-xp-cijfer tabular">{k.xp}</span>
           </div>
           <div class="pp-balk pp-balk-xp">
-            <div class="pp-balk-vulling" style={`width:${voortgang}%`}></div>
+            <div class="pp-balk-vulling" style={`width:${k.progress}%`}></div>
           </div>
-          <p class="pp-xp-tekst">{upgrade}</p>
+          <p class="pp-xp-tekst">{xpTekst}</p>
         </div>
 
         <div class="pp-voet">
-          <p class="pp-voet-regel">Seizoen {seizoen} &middot; Level {levelNaam}</p>
-          {school && <p class="pp-school">{school}</p>}
+          <p class="pp-voet-regel">
+            Seizoen {k.season}{k.overall != null && LEVELS[tier] ? ` · Level ${LEVELS[tier]}` : ""}
+          </p>
+          {
+            (k.school || k.card_number) && (
+              <p class="pp-school">
+                {k.school}
+                {k.school && k.card_number ? " · " : ""}
+                <span class="tabular">{k.card_number}</span>
+              </p>
+            )
+          }
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<style>
-  .pp-wrap {
+<script>
+  // Kantelen met de muis, met een lichtval die over het metaal meeloopt.
+  // Alleen met een muis: op een telefoon zou de kaart bij scrollen wiebelen.
+  const stil = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!stil) {
+    document.querySelectorAll<HTMLElement>(".pp-wrap").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "mouse") return;
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        el.style.setProperty("--pp-ry", `${((px - 0.5) * 14).toFixed(2)}deg`);
+        el.style.setProperty("--pp-rx", `${(-(py - 0.5) * 12).toFixed(2)}deg`);
+        el.style.setProperty("--pp-gx", `${(px * 100).toFixed(1)}%`);
+        el.style.setProperty("--pp-gy", `${(py * 100).toFixed(1)}%`);
+        el.style.setProperty("--pp-licht", "1");
+      });
+      el.addEventListener("pointerleave", () => {
+        el.style.setProperty("--pp-rx", "0deg");
+        el.style.setProperty("--pp-ry", "0deg");
+        el.style.setProperty("--pp-licht", "0");
+      });
+    });
+  }
+</script>
+
+<style is:global>
+
+.pp-wrap, .pp-wrap *, .pp-wrap *::before, .pp-wrap *::after { box-sizing: border-box; }
+.pp-wrap p, .pp-wrap ul { margin: 0; }
+.pp-wrap ul { padding: 0; list-style: none; }
+.pp-wrap svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pp-wrap .tabular { font-variant-numeric: tabular-nums; }
+
+/* ---------- Basis: de maten en de kleuren die elk level deelt ---------- */
+.pp-wrap {
     --u: var(--kaart-u, 1rem);
-    --pp-facet: var(--u);
+    font-size: var(--u);
+    font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --pp-facet: calc(var(--u) * 1);
     --pp-rand: calc(var(--u) * 0.4);
     --pp-surface-1: #131c30;
     --pp-surface-2: #0a0f1c;
     --pp-accent: #22e06b;
     --pp-tekst: #f1f5f9;
     --pp-tekst-zacht: #94a3b8;
+    /* Per level overschreven: het metaal van het frame, de tint en de gloed. */
     --pp-tier: #94a3b8;
     --pp-tier-zacht: rgba(148, 163, 184, 0.18);
     --pp-gloed: rgba(148, 163, 184, 0.25);
@@ -234,97 +232,288 @@ const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
 
     width: calc(var(--u) * 22.5);
     max-width: 100%;
+    margin-inline: auto;
     color: var(--pp-tekst);
     font-variant-numeric: tabular-nums;
-    text-align: left;
-  }
+}
 
-  .pp-wrap p {
-    margin: 0;
-  }
-
-  .pp-frame {
+/*
+ * Het frame: metaal met facet-hoeken. De hoeken komen van een clip-path, en
+ * omdat die ook de schaduw wegknipt zit de gloed als drop-shadow op de wrap.
+ */
+.pp-frame {
     position: relative;
     padding: var(--pp-rand);
     background: var(--pp-metaal);
     clip-path: polygon(
-      var(--pp-facet) 0,
-      calc(100% - var(--pp-facet)) 0,
-      100% var(--pp-facet),
-      100% calc(100% - var(--pp-facet)),
-      calc(100% - var(--pp-facet)) 100%,
-      var(--pp-facet) 100%,
-      0 calc(100% - var(--pp-facet)),
-      0 var(--pp-facet)
+        var(--pp-facet) 0,
+        calc(100% - var(--pp-facet)) 0,
+        100% var(--pp-facet),
+        100% calc(100% - var(--pp-facet)),
+        calc(100% - var(--pp-facet)) 100%,
+        var(--pp-facet) 100%,
+        0 calc(100% - var(--pp-facet)),
+        0 var(--pp-facet)
     );
     filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 22px var(--pp-gloed));
-  }
+    /* Kantelen (muis of gyroscoop) en omdraaien zitten in dezelfde transform. */
+    transform: perspective(900px) rotateX(var(--pp-rx, 0deg)) rotateY(calc(var(--pp-ry, 0deg) + var(--pp-flip, 0deg)));
+    transition: transform 0.28s ease;
+    will-change: transform;
+}
 
-  .pp-frame-glans {
+.pp-geen-overgang {
+    transition: none;
+}
+
+/* De lichtval die met het kantelen meeloopt over het metaal. */
+.pp-frame-licht {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--pp-licht, 0);
+    background: radial-gradient(45% 45% at var(--pp-gx, 30%) var(--pp-gy, 20%), rgba(255, 255, 255, 0.45), transparent 70%);
+    mix-blend-mode: soft-light;
+    transition: opacity 0.4s ease;
+}
+
+/* Het rugnummer: groot en in het metaal van het level, linksonder op de foto
+   (rechts staan de mijlpalen). */
+.pp-rugnummer {
+    position: absolute;
+    left: calc(var(--u) * 0.9);
+    bottom: calc(var(--u) * 0.35);
+    z-index: 2;
+    font-size: calc(var(--u) * 2.6);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--pp-tier);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- De achterkant ---------- */
+.pp-achter-inhoud {
+    position: relative;
+    padding: calc(var(--u) * 1) calc(var(--u) * 1.1) calc(var(--u) * 0.9);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--u) * 0.35);
+}
+
+.pp-achter-naam {
+    font-size: calc(var(--u) * 1.05);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.pp-achter-kop {
+    margin-top: calc(var(--u) * 0.6);
+    font-size: calc(var(--u) * 0.68);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pp-tier);
+}
+
+.pp-rapporten {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--u) * 0.35);
+}
+
+.pp-rapport {
+    padding: calc(var(--u) * 0.5) calc(var(--u) * 0.65);
+    border-radius: calc(var(--u) * 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.pp-rapport-regel {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--u) * 0.5);
+    font-size: calc(var(--u) * 0.8);
+}
+
+.pp-rapport-trainer {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--pp-tekst-zacht);
+}
+
+.pp-rapport-cijfer {
+    margin-left: auto;
+    font-size: calc(var(--u) * 1.05);
+    font-weight: 800;
+}
+
+.pp-rapport-noot {
+    margin-top: calc(var(--u) * 0.2);
+    font-size: calc(var(--u) * 0.75);
+    line-height: 1.35;
+    color: var(--pp-tekst-zacht);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.pp-achter-leeg {
+    font-size: calc(var(--u) * 0.78);
+    color: var(--pp-tekst-zacht);
+}
+
+.pp-doel {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--u) * 0.35);
+    padding: calc(var(--u) * 0.5) calc(var(--u) * 0.65);
+    border-radius: calc(var(--u) * 0.6);
+    background: rgba(34, 224, 107, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(34, 224, 107, 0.25);
+}
+
+.pp-doel-status {
+    margin-left: auto;
+    font-size: calc(var(--u) * 0.7);
+    font-weight: 700;
+    color: var(--pp-accent);
+}
+
+.pp-achter-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--u) * 0.35);
+}
+
+.pp-achter-voet {
+    margin-top: auto;
+    padding-top: calc(var(--u) * 0.8);
+}
+
+/* ---------- Het pijltje per categorie ---------- */
+.pp-delta {
+    margin-left: auto;
+    font-size: calc(var(--u) * 0.68);
+    font-weight: 800;
+    padding: calc(var(--u) * 0.05) calc(var(--u) * 0.3);
+    border-radius: 999px;
+    animation: pp-delta-in 0.6s ease-out both;
+}
+
+.pp-delta-op {
+    color: #22e06b;
+    background: rgba(34, 224, 107, 0.14);
+}
+
+.pp-delta-af {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.14);
+}
+
+@keyframes pp-delta-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* De glans over het metaal: een lichtval linksboven en een diagonale streep. */
+.pp-frame-glans {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background:
-      linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.55) 44%, rgba(255, 255, 255, 0.1) 50%, transparent 58%),
-      radial-gradient(70% 40% at 10% 0%, rgba(255, 255, 255, 0.5), transparent 70%);
+        linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.55) 44%, rgba(255, 255, 255, 0.1) 50%, transparent 58%),
+        radial-gradient(70% 40% at 10% 0%, rgba(255, 255, 255, 0.5), transparent 70%);
     mix-blend-mode: soft-light;
-  }
+}
 
-  .pp-binnen {
+.pp-binnen {
     position: relative;
     overflow: hidden;
     background: linear-gradient(180deg, var(--pp-surface-1), var(--pp-surface-2));
     clip-path: polygon(
-      calc(var(--pp-facet) - var(--pp-rand)) 0,
-      calc(100% - var(--pp-facet) + var(--pp-rand)) 0,
-      100% calc(var(--pp-facet) - var(--pp-rand)),
-      100% calc(100% - var(--pp-facet) + var(--pp-rand)),
-      calc(100% - var(--pp-facet) + var(--pp-rand)) 100%,
-      calc(var(--pp-facet) - var(--pp-rand)) 100%,
-      0 calc(100% - var(--pp-facet) + var(--pp-rand)),
-      0 calc(var(--pp-facet) - var(--pp-rand))
+        calc(var(--pp-facet) - var(--pp-rand)) 0,
+        calc(100% - var(--pp-facet) + var(--pp-rand)) 0,
+        100% calc(var(--pp-facet) - var(--pp-rand)),
+        100% calc(100% - var(--pp-facet) + var(--pp-rand)),
+        calc(100% - var(--pp-facet) + var(--pp-rand)) 100%,
+        calc(var(--pp-facet) - var(--pp-rand)) 100%,
+        0 calc(100% - var(--pp-facet) + var(--pp-rand)),
+        0 calc(var(--pp-facet) - var(--pp-rand))
     );
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  }
+}
 
-  .pp-foto-vak {
+/* ---------- De foto ---------- */
+.pp-foto-vak {
     position: relative;
     aspect-ratio: 3 / 2;
     background: radial-gradient(80% 60% at 50% 30%, var(--pp-tier-zacht), transparent 70%), var(--pp-surface-1);
-  }
+}
 
-  .pp-foto-vak :global(.pp-foto) {
+.pp-foto {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
-  }
+}
 
-  .pp-silhouet {
+/* Zonder foto: een net silhouet, en voor wie het mag een knop. */
+.pp-silhouet {
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: calc(var(--u) * 0.5);
     height: 100%;
-    padding-bottom: calc(var(--u) * 1.5);
-  }
+    padding-bottom: calc(var(--u) * 2.75);
+}
 
-  .pp-silhouet-icoon {
+.pp-silhouet-icoon {
     width: calc(var(--u) * 5.5);
     height: calc(var(--u) * 5.5);
     color: var(--pp-tier);
     opacity: 0.35;
-  }
+}
 
-  .pp-foto-fade {
+.pp-foto-knop {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--u) * 0.35);
+    padding: calc(var(--u) * 0.4) calc(var(--u) * 0.8);
+    border-radius: 999px;
+    font-size: calc(var(--u) * 0.75);
+    font-weight: 600;
+    color: var(--pp-tekst);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.pp-foto-knop:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* Boven donkerder voor het cijfer, onder een fade naar het vlak eronder. */
+.pp-foto-fade {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(5, 8, 16, 0.55) 0%, transparent 40%),
-      linear-gradient(180deg, transparent 50%, var(--pp-surface-1) 100%);
-  }
+    background: linear-gradient(180deg, rgba(5, 8, 16, 0.55) 0%, transparent 40%), linear-gradient(180deg, transparent 50%, var(--pp-surface-1) 100%);
+}
 
-  .pp-merk {
+.pp-merk {
     position: absolute;
     top: calc(var(--u) * 0.55);
     left: 0;
@@ -336,55 +525,51 @@ const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
     text-transform: uppercase;
     color: var(--pp-tier);
     opacity: 0.9;
-  }
+}
 
-  .pp-overall-blok {
+.pp-overall-blok {
     position: absolute;
     top: calc(var(--u) * 1.5);
     left: calc(var(--u) * 1);
     line-height: 1;
-  }
+}
 
-  .pp-overall {
+.pp-overall {
     font-size: calc(var(--u) * 3.75);
     font-weight: 800;
     letter-spacing: -0.05em;
     line-height: 0.9;
     color: var(--pp-accent);
     text-shadow:
-      0 2px 12px rgba(0, 0, 0, 0.6),
-      0 0 28px rgba(34, 224, 107, 0.35);
-  }
+        0 2px 12px rgba(0, 0, 0, 0.6),
+        0 0 28px rgba(34, 224, 107, 0.35);
+}
 
-  .pp-positie {
+.pp-positie {
     display: inline-flex;
     align-items: center;
     gap: calc(var(--u) * 0.3);
-    margin-top: calc(var(--u) * 0.4) !important;
+    margin-top: calc(var(--u) * 0.4);
     font-size: calc(var(--u) * 0.6875);
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--pp-tier);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
-  }
+}
 
-  .pp-positie-icoon {
-    width: calc(var(--u) * 0.875);
-    height: calc(var(--u) * 0.875);
-  }
-
-  .pp-categorie {
-    margin-top: calc(var(--u) * 0.3) !important;
+.pp-categorie {
+    margin-top: calc(var(--u) * 0.3);
     font-size: calc(var(--u) * 0.6875);
     font-weight: 600;
     letter-spacing: 0.14em;
     color: var(--pp-tekst);
     opacity: 0.85;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
-  }
+}
 
-  .pp-badges {
+/* Drie badges rechtsboven: rond icoon in de tint van het level, label eronder. */
+.pp-badges {
     position: absolute;
     top: calc(var(--u) * 1.5);
     right: calc(var(--u) * 0.85);
@@ -394,17 +579,17 @@ const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
     margin: 0;
     padding: 0;
     list-style: none;
-  }
+}
 
-  .pp-badge {
+.pp-badge {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: calc(var(--u) * 0.2);
     width: calc(var(--u) * 3.75);
-  }
+}
 
-  .pp-badge-icoon {
+.pp-badge-icoon {
     display: grid;
     place-items: center;
     width: calc(var(--u) * 1.9);
@@ -413,16 +598,11 @@ const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
     color: var(--pp-surface-2);
     background: var(--pp-metaal);
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.35) inset,
-      0 4px 10px rgba(0, 0, 0, 0.5);
-  }
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset,
+        0 4px 10px rgba(0, 0, 0, 0.5);
+}
 
-  .pp-badge-icoon svg {
-    width: calc(var(--u) * 0.875);
-    height: calc(var(--u) * 0.875);
-  }
-
-  .pp-badge-label {
+.pp-badge-label {
     max-width: 100%;
     line-height: 1.15;
     font-size: calc(var(--u) * 0.5625);
@@ -431,197 +611,346 @@ const eenheid = schaal ? `--kaart-u: calc(1rem * ${schaal});` : "";
     text-align: center;
     color: var(--pp-tekst);
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-  }
+}
 
-  .pp-body {
+/* ---------- Het onderste deel ---------- */
+.pp-body {
     position: relative;
     padding: 0 calc(var(--u) * 1) calc(var(--u) * 0.9);
-  }
+}
 
-  .pp-patroon {
+/* Keepers: diagonale handschoen-strepen. Veldspelers: veldlijnen. Subtiel. */
+.pp-patroon {
     position: absolute;
     inset: 0;
     pointer-events: none;
     opacity: 0.5;
-    background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 18px);
-  }
+}
 
-  .pp-naam {
+.pp-keeper .pp-patroon {
+    background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 18px);
+}
+
+.pp-field .pp-patroon {
+    background:
+        radial-gradient(circle at 50% 30%, transparent 22%, rgba(255, 255, 255, 0.05) 22.5%, transparent 23.5%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 44px);
+}
+
+.pp-naam {
     position: relative;
     margin-top: calc(var(--u) * -0.25);
     text-align: center;
     line-height: 1.05;
-  }
+}
 
-  .pp-voornaam {
+.pp-voornaam {
     font-size: calc(var(--u) * 0.75);
     font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--pp-tekst-zacht);
-  }
+}
 
-  .pp-achternaam {
-    margin-top: calc(var(--u) * 0.15) !important;
+.pp-achternaam {
+    margin-top: calc(var(--u) * 0.15);
     font-size: calc(var(--u) * 1.625);
     font-weight: 800;
     letter-spacing: -0.02em;
     overflow-wrap: anywhere;
-  }
+}
 
-  .pp-stats {
+.pp-stats {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: calc(var(--u) * 0.6) calc(var(--u) * 1.1);
     margin-top: calc(var(--u) * 0.85);
-  }
+}
 
-  .pp-stat-regel {
+.pp-stat-regel {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: calc(var(--u) * 0.5);
-  }
+}
 
-  .pp-stat-label {
+.pp-stat-label {
     min-width: 0;
     font-size: calc(var(--u) * 0.75);
     font-weight: 500;
     color: var(--pp-tekst-zacht);
-  }
+}
 
-  .pp-stat-cijfer {
+.pp-stat-cijfer {
     font-size: calc(var(--u) * 1.0625);
     font-weight: 800;
     line-height: 1;
-  }
+}
 
-  .pp-balk {
+.pp-balk {
     height: calc(var(--u) * 0.2);
     margin-top: calc(var(--u) * 0.3);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.09);
     overflow: hidden;
-  }
+}
 
-  .pp-balk-vulling {
+.pp-balk-vulling {
     height: 100%;
     border-radius: 999px;
     background: linear-gradient(90deg, var(--pp-accent), var(--pp-tier));
-  }
+    transition: width 0.6s ease;
+}
 
-  .pp-xp {
+.pp-leeg {
+    position: relative;
+    margin: calc(var(--u) * 1) auto 0;
+    max-width: calc(var(--u) * 15);
+    text-align: center;
+    font-size: calc(var(--u) * 0.8125);
+    color: var(--pp-tekst-zacht);
+}
+
+/* De XP-balk: het stimuleringsdeel, in de tint van het level. */
+.pp-xp {
     position: relative;
     margin-top: calc(var(--u) * 0.9);
     padding-top: calc(var(--u) * 0.7);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
+}
 
-  .pp-xp-regel {
+.pp-xp-regel {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-  }
+}
 
-  .pp-xp-label {
+.pp-xp-label {
     font-size: calc(var(--u) * 0.625);
     font-weight: 700;
     letter-spacing: 0.22em;
     color: var(--pp-tier);
-  }
+}
 
-  .pp-xp-cijfer {
+.pp-xp-cijfer {
     font-size: calc(var(--u) * 0.8125);
     font-weight: 700;
     color: var(--pp-tier);
-  }
+}
 
-  .pp-balk-xp {
+.pp-balk-xp {
     height: calc(var(--u) * 0.3);
     background: rgba(255, 255, 255, 0.1);
-  }
+}
 
-  .pp-balk-xp .pp-balk-vulling {
+.pp-balk-xp .pp-balk-vulling {
     background: var(--pp-metaal);
-  }
+}
 
-  .pp-xp-tekst {
-    margin-top: calc(var(--u) * 0.35) !important;
+.pp-xp-tekst {
+    margin-top: calc(var(--u) * 0.35);
     font-size: calc(var(--u) * 0.75);
     color: var(--pp-tekst-zacht);
-  }
+}
 
-  .pp-voet {
+.pp-voet {
     position: relative;
     margin-top: calc(var(--u) * 0.75);
     text-align: center;
     line-height: 1.3;
-  }
+}
 
-  .pp-voet-regel {
+.pp-voet-regel {
     font-size: calc(var(--u) * 0.6875);
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--pp-tier);
-  }
+}
 
-  .pp-school {
+.pp-school {
     font-size: calc(var(--u) * 0.625);
     color: var(--pp-tekst-zacht);
-  }
+}
 
-  /* Levels: het metaal van het frame, gelijk aan het platform. */
-  .pp-tier-brons {
+/* ---------- Onder de kaart ---------- */
+.pp-acties {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: calc(var(--u) * 0.5);
+    margin-top: calc(var(--u) * 1);
+}
+
+.pp-actie {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--u) * 0.4);
+    min-height: calc(var(--u) * 2.75);
+    padding: calc(var(--u) * 0.5) calc(var(--u) * 1);
+    border-radius: 999px;
+    font-size: calc(var(--u) * 0.8125);
+    font-weight: 600;
+    color: var(--pp-tekst);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    transition: background 0.15s ease;
+}
+
+.pp-actie:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/*
+ * De upgrade-flits: een korte lichtstoot over het nieuwe frame.
+ *
+ * Een eigen laag en niet de filter van .pp-frame, want daar zit al de gloed op
+ * en bij elite ook de holografische animatie; die zouden elkaar overschrijven.
+ */
+.pp-flits {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: radial-gradient(60% 50% at 50% 45%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.35) 45%, transparent 72%);
+    animation: pp-flits 1.1s ease-out forwards;
+}
+
+@keyframes pp-flits {
+    0% {
+        opacity: 0;
+    }
+    18% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.pp-puls {
+    animation: pp-puls 0.9s ease-out;
+}
+
+@keyframes pp-puls {
+    0% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.035);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pp-frame {
+        transition: none;
+        transform: none;
+    }
+
+    .pp-delta {
+        animation: none;
+    }
+
+    .pp-flits,
+    .pp-puls {
+        animation: none;
+    }
+
+    .pp-flits {
+        opacity: 0;
+    }
+}
+
+/* ---------- Levels: het metaal van het frame ---------- */
+
+/* Brons: koper. Warm, met een donkere schaduwzijde. */
+.pp-tier-brons {
     --pp-tier: #e0a370;
     --pp-tier-zacht: rgba(214, 154, 91, 0.2);
     --pp-gloed: rgba(214, 140, 80, 0.3);
     --pp-metaal: linear-gradient(135deg, #f2b98a 0%, #b5651d 18%, #6b3a12 36%, #f0c39a 50%, #a9581a 66%, #5a2f0e 82%, #d98a4b 100%);
-  }
+}
 
-  .pp-tier-zilver {
+/* Zilver: chroom. Koel, hard licht, bijna wit in de spiegeling. */
+.pp-tier-zilver {
     --pp-tier: #e2e9f0;
     --pp-tier-zacht: rgba(219, 228, 238, 0.18);
     --pp-gloed: rgba(219, 228, 238, 0.32);
     --pp-metaal: linear-gradient(135deg, #ffffff 0%, #b9c3ce 18%, #5b6672 36%, #f4f7fa 50%, #9aa6b3 66%, #4a535d 82%, #dfe6ec 100%);
-  }
+}
 
-  .pp-tier-goud {
+/* Goud: warm, met een gloed die net buiten het frame valt. */
+.pp-tier-goud {
     --pp-tier: #f0cf6c;
     --pp-tier-zacht: rgba(232, 199, 102, 0.22);
     --pp-gloed: rgba(240, 200, 90, 0.5);
     --pp-surface-1: #172038;
     --pp-metaal: linear-gradient(135deg, #fbe28a 0%, #d4a72c 18%, #8a5c0a 36%, #fff0b3 50%, #c9961c 66%, #6e4a06 82%, #ecc95c 100%);
-  }
+}
 
-  .pp-tier-elite {
+/* Elite: holografisch. Het enige frame dat beweegt, langzaam. */
+.pp-tier-elite {
     --pp-tier: #f3e2a2;
     --pp-tier-zacht: rgba(200, 190, 255, 0.22);
     --pp-gloed: rgba(190, 170, 255, 0.45);
     --pp-surface-1: #171432;
     --pp-surface-2: #07070f;
-    --pp-metaal: linear-gradient(120deg, #e9e6ff 0%, #8fd3ff 11%, #4f4a9c 21%, #c8a2ff 32%, #ffb3e6 43%, #6b3f7c 53%, #fff2a8 63%, #a8ffd8 74%, #3f6b96 85%, #e9e6ff 100%);
-  }
+    /* Pasteltinten afgewisseld met donkere facetten; zonder die donkere stops
+       leest het als een sticker in plaats van als metaal. */
+    --pp-metaal: linear-gradient(
+        120deg,
+        #e9e6ff 0%,
+        #8fd3ff 11%,
+        #4f4a9c 21%,
+        #c8a2ff 32%,
+        #ffb3e6 43%,
+        #6b3f7c 53%,
+        #fff2a8 63%,
+        #a8ffd8 74%,
+        #3f6b96 85%,
+        #e9e6ff 100%
+    );
+}
 
-  .pp-tier-elite .pp-frame {
+.pp-tier-elite .pp-frame {
     background-size: 300% 300%;
     animation: pp-holo 9s ease-in-out infinite;
-  }
+}
 
-  @keyframes pp-holo {
+@keyframes pp-holo {
     0%,
     100% {
-      background-position: 0% 50%;
+        background-position: 0% 50%;
     }
     50% {
-      background-position: 100% 50%;
+        background-position: 100% 50%;
     }
-  }
+}
 
-  @media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
     .pp-tier-elite .pp-frame {
-      animation: none;
+        animation: none;
     }
-  }
+}
+
+/* ---------- Kleine schermen ---------- */
+@media (max-width: 360px) {
+    .pp-overall {
+        font-size: calc(var(--u) * 3.125);
+    }
+
+    .pp-achternaam {
+        font-size: calc(var(--u) * 1.375);
+    }
+}
+
+.pp-silhouet-icoon svg {
+    width: 100%;
+    height: 100%;
+}
+
 </style>

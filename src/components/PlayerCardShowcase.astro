@@ -25,7 +25,8 @@ const levels = [
 const punten = [
   "Zes categorieën per positie, apart voor keepers en veldspelers",
   "Levels van brons tot elite, met XP voor elke training en elk rapport",
-  "Badges voor mijlpalen, zoals Uitblinker en Onmisbaar",
+  "Per categorie een pijltje dat laat zien wat er beter of slechter ging",
+  "Badges voor mijlpalen, zoals Vaste waarde en In de lift",
   "Deelbaar met opa en oma, met een grens aan wat een buitenstaander ziet",
   "Bewust geen ranglijst: een speler groeit ten opzichte van zichzelf",
 ];
@@ -87,13 +88,13 @@ const punten = [
     >
       {
         kaarten.map((kaart) => {
-          const plek = waaier[kaart.tier];
+          const plek = waaier[kaart.level];
           return (
             <div
               class="waaier-kaart absolute left-1/2 top-1/2"
               style={`--x:${plek.x};--y:${plek.y}%;--r:${plek.r}deg;z-index:${plek.z}`}
             >
-              <CollectibleCard {...kaart} />
+              <CollectibleCard kaart={kaart} />
             </div>
           );
         })

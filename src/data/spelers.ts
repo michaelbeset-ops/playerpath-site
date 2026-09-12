@@ -1,11 +1,15 @@
 import type { ImageMetadata } from "astro";
+import type { Kaart } from "../components/CollectibleCard.astro";
 
-// De vier voorbeeldkaarten, één per level. Namen komen uit de voorbeeldschool
-// van het platform; levelgrenzen uit RatingSettings (zilver 150, goud 400,
-// elite 900 XP) en badges uit PlayerBadges.
+// Vier voorbeeldkaarten, één per level, in hetzelfde formaat als de embed van
+// het platform. Allemaal verzonnen spelers, geen echte kinderen.
+//
+// Levels hangen aan XP, niet aan het cijfer: zilver vanaf 150, goud vanaf 400,
+// elite vanaf 900. Daarom kan een zilveren kaart een hoger cijfer hebben dan
+// een gouden.
 //
 // Foto's: zet speler-1.jpg t/m speler-4.jpg in src/assets/screens/ en ze
-// verschijnen vanzelf op de kaarten. Alleen met toestemming van de ouders.
+// verschijnen vanzelf op de kaarten. Alleen van eigen spelers, met toestemming.
 const fotos = import.meta.glob<{ default: ImageMetadata }>(
   "../assets/screens/speler-*.{png,jpg,jpeg,webp,avif}",
   { eager: true },
@@ -16,76 +20,114 @@ const foto = (nummer: number) => {
   return hit?.[1].default ?? null;
 };
 
-const categorieen = ["Reflexen", "Uitkomen", "Voetenwerk", "1-op-1", "Hoge ballen", "Communicatie"];
-const cijfers = (waarden: number[]) =>
-  waarden.map((waarde, i) => ({ label: categorieen[i], waarde }));
+const school = "Voetbalschool PlayerPath";
+const seizoen = "2026/27";
 
-export const kaarten = [
+export const kaarten: Kaart[] = [
   {
-    tier: "brons" as const,
-    voornaam: "Liam",
-    achternaam: "Bakker",
-    overall: 64,
-    categorie: "O11",
-    cijfers: cijfers([66, 61, 63, 65, 60, 69]),
-    xp: 90,
-    voortgang: 60,
-    upgrade: "Nog 60 punten tot je volgende upgrade",
-    badges: [{ label: "Altijd op tijd", icoon: "kalender" as const }],
+    first_name: "Adam",
+    last_name: "Hoekstra",
+    position: "field",
+    age_category: "O13",
+    overall: 72,
+    level: "brons",
+    xp: 95,
+    progress: 63,
+    shirt_number: 10,
+    season: seizoen,
+    school,
+    card_number: "#0026",
+    categories: [
+      ["Techniek", 74, 1],
+      ["Inzicht", 70, 0],
+      ["Passing", 73, 3],
+      ["Afwerking", 71, 0],
+      ["Snelheid", 75, 2],
+      ["Mentaliteit", 69, -2],
+    ],
+    badges: [["star", "Op de kaart"]],
     foto: foto(1),
-    school: "Keepersschool Rob",
   },
   {
-    tier: "zilver" as const,
-    voornaam: "Sam",
-    achternaam: "de Boer",
-    overall: 72,
-    categorie: "O12",
-    cijfers: cijfers([74, 70, 71, 73, 69, 75]),
+    first_name: "Fenna",
+    last_name: "de Vries",
+    position: "keeper",
+    age_category: "O12",
+    overall: 84,
+    level: "zilver",
     xp: 260,
-    voortgang: 44,
-    upgrade: "Nog 140 punten tot je volgende upgrade",
+    progress: 44,
+    season: seizoen,
+    school,
+    card_number: "#0015",
+    categories: [
+      ["Reflexen", 86, 2],
+      ["Uitkomen", 83, 5],
+      ["Voetenwerk", 84, 1],
+      ["1-op-1", 85, 0],
+      ["Hoge ballen", 82, 3],
+      ["Communicatie", 84, 2],
+    ],
     badges: [
-      { label: "Vaste waarde", icoon: "ster" as const },
-      { label: "Altijd op tijd", icoon: "kalender" as const },
+      ["trending", "In de lift"],
+      ["check", "Doel gehaald"],
     ],
     foto: foto(2),
-    school: "Keepersschool Rob",
   },
   {
-    tier: "goud" as const,
-    voornaam: "Youssef",
-    achternaam: "El Amrani",
-    overall: 81,
-    categorie: "O13",
-    cijfers: cijfers([79, 80, 84, 78, 80, 85]),
-    xp: 620,
-    voortgang: 44,
-    upgrade: "Nog 280 punten tot je volgende upgrade",
+    first_name: "Sem",
+    last_name: "de Vries",
+    position: "keeper",
+    age_category: "O10",
+    overall: 79,
+    level: "goud",
+    xp: 420,
+    progress: 4,
+    shirt_number: 1,
+    season: seizoen,
+    school,
+    card_number: "#0001",
+    categories: [
+      ["Reflexen", 81, 3],
+      ["Uitkomen", 77, 2],
+      ["Voetenwerk", 79, 0],
+      ["1-op-1", 80, 4],
+      ["Hoge ballen", 78, -1],
+      ["Communicatie", 79, 2],
+    ],
     badges: [
-      { label: "Uitblinker", icoon: "trofee" as const },
-      { label: "Vaste waarde", icoon: "ster" as const },
-      { label: "Onmisbaar", icoon: "medaille" as const },
+      ["trophy", "Vaste waarde"],
+      ["trending", "In de lift"],
+      ["star", "Op de kaart"],
     ],
     foto: foto(3),
-    school: "Keepersschool Rob",
   },
   {
-    tier: "elite" as const,
-    voornaam: "Noor",
-    achternaam: "Visser",
+    first_name: "Jayden",
+    last_name: "Meijer",
+    position: "keeper",
+    age_category: "O14",
     overall: 88,
-    categorie: "O14",
-    cijfers: cijfers([90, 86, 87, 89, 85, 91]),
-    xp: 1140,
-    voortgang: 100,
-    upgrade: "Het hoogste level bereikt",
+    level: "elite",
+    xp: 960,
+    progress: 100,
+    shirt_number: 16,
+    season: seizoen,
+    school,
+    card_number: "#0003",
+    categories: [
+      ["Reflexen", 90, 2],
+      ["Uitkomen", 87, 4],
+      ["Voetenwerk", 86, 1],
+      ["1-op-1", 89, 3],
+      ["Hoge ballen", 88, 0],
+      ["Communicatie", 91, 2],
+    ],
     badges: [
-      { label: "Uitblinker", icoon: "trofee" as const },
-      { label: "Compleet", icoon: "medaille" as const },
-      { label: "Onmisbaar", icoon: "kalender" as const },
+      ["trophy", "Vaste waarde"],
+      ["trending", "In de lift"],
+      ["check", "Doel gehaald"],
     ],
     foto: foto(4),
-    school: "Keepersschool Rob",
   },
 ];
