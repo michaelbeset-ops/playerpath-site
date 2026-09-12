@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: withastro/action@v3
+        with:
+          # Astro 7 eist Node 22.12 of hoger; de actie pakt anders Node 20.
+          node-version: 22
 
   publiceren:
     needs: bouwen
