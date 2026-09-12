@@ -1,0 +1,218 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Interne vergelijkpagina voor de menubalk. Niet gelinkt, niet in de sitemap,
+// niet in Google. Weghalen zodra er een keuze gemaakt is.
+const links = ["Voetbalscholen", "Keeperscholen", "Spelervolgsysteem", "Inschrijven", "Tarieven"];
+const basis = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const varianten = [
+  { nr: "1", naam: "Zwevende pil", uitleg: "Wat er nu staat. Glas over de pagina, links gecentreerd." },
+  { nr: "2", naam: "Volle balk", uitleg: "Klassiek en rustig. Links direct naast het logo, rand eronder." },
+  { nr: "3", naam: "Met uitklapmenu", uitleg: "Eén ingang 'Oplossingen' die openklapt. Schaalt als er pagina's bijkomen." },
+  { nr: "4", naam: "Met aankondigingsbalk", uitleg: "Dun balkje erboven voor nieuws of een aanbieding." },
+  { nr: "5", naam: "Logo in het midden", uitleg: "Merkgericht, symmetrisch. Werkt bij weinig menu-items." },
+  { nr: "6", naam: "Minimaal", uitleg: "Alleen het hoogstnodige. Alle aandacht naar de knop." },
+];
+---
+
+<Layout title="Menu-opties" description="Interne vergelijking van menubalken." noindex>
+  <main class="bg-[#070b14] py-14">
+    <div class="mx-auto max-w-6xl px-6">
+      <h1 class="text-2xl font-semibold tracking-tight text-white">Zes menubalken</h1>
+      <p class="mt-2 text-sm text-white/50">
+        Allemaal in de echte huisstijl, op de donkere hero-achtergrond zoals ze in het
+        echt zouden staan.
+      </p>
+    </div>
+
+    <div class="mt-12 space-y-14">
+      {
+        varianten.map((v) => (
+          <section>
+            <div class="mx-auto mb-4 max-w-6xl px-6">
+              <p class="text-sm font-semibold text-accent">
+                {v.nr}. {v.naam}
+              </p>
+              <p class="text-sm text-white/45">{v.uitleg}</p>
+            </div>
+
+            <div class="relative overflow-hidden bg-ink py-6">
+              <div
+                class="pointer-events-none absolute -left-40 top-[-10rem] h-[24rem] w-[34rem] rounded-full bg-accent/[0.13] blur-[120px]"
+                aria-hidden="true"
+              />
+
+              {/* 1. Zwevende pil */}
+              {v.nr === "1" && (
+                <div class="relative px-5">
+                  <div class="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-ink/70 shadow-[0_12px_40px_-16px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+                    <div class="flex h-14 items-center justify-between gap-4 pl-5 pr-2">
+                      <img src={`${basis}/logo/playerpath-logo-wit.png`} alt="" class="w-auto" style="height:28px" />
+                      <div class="hidden items-center gap-0.5 lg:flex">
+                        {links.map((l, i) => (
+                          <span
+                            class={`rounded-lg px-3.5 py-2 text-[13.5px] font-medium ${i === 0 ? "bg-white/[0.08] text-white" : "text-white/60"}`}
+                          >
+                            {l}
+                          </span>
+                        ))}
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="px-3 py-2 text-[13.5px] font-medium text-white/65">Inloggen</span>
+                        <span class="rounded-xl bg-accent px-4 py-2 text-[13.5px] font-semibold text-ink">
+                          Plan een demo
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 2. Volle balk */}
+              {v.nr === "2" && (
+                <div class="relative -my-6 border-b border-white/10 bg-ink/95">
+                  <div class="mx-auto flex h-16 max-w-6xl items-center gap-10 px-6">
+                    <img src={`${basis}/logo/playerpath-logo-wit.png`} alt="" class="w-auto" style="height:28px" />
+                    <div class="hidden items-center gap-7 lg:flex">
+                      {links.map((l, i) => (
+                        <span
+                          class={`relative text-[14px] font-medium ${i === 0 ? "text-white" : "text-white/60"}`}
+                        >
+                          {l}
+                          {i === 0 && (
+                            <span class="absolute -bottom-[22px] left-0 right-0 h-0.5 rounded-full bg-accent" />
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                    <div class="ml-auto flex items-center gap-5">
+                      <span class="text-[14px] font-medium text-white/65">Inloggen</span>
+                      <span class="rounded-lg bg-accent px-4 py-2 text-[14px] font-semibold text-ink">
+                        Plan een demo
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 3. Met uitklapmenu */}
+              {v.nr === "3" && (
+                <div class="relative px-5 pb-32">
+                  <div class="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-ink/80 backdrop-blur-xl">
+                    <div class="flex h-14 items-center justify-between gap-4 pl-5 pr-2">
+                      <img src={`${basis}/logo/playerpath-logo-wit.png`} alt="" class="w-auto" style="height:28px" />
+                      <div class="hidden items-center gap-0.5 lg:flex">
+                        <span class="flex items-center gap-1.5 rounded-lg bg-white/[0.08] px-3.5 py-2 text-[13.5px] font-medium text-white">
+                          Oplossingen
+                          <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                            <path d="m6 9 6 6 6-6" />
+                          </svg>
+                        </span>
+                        <span class="rounded-lg px-3.5 py-2 text-[13.5px] font-medium text-white/60">Tarieven</span>
+                        <span class="rounded-lg px-3.5 py-2 text-[13.5px] font-medium text-white/60">Vragen</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="px-3 py-2 text-[13.5px] font-medium text-white/65">Inloggen</span>
+                        <span class="rounded-xl bg-accent px-4 py-2 text-[13.5px] font-semibold text-ink">
+                          Plan een demo
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mx-auto mt-2 max-w-2xl rounded-2xl border border-white/10 bg-[#121a2b] p-3 shadow-2xl">
+                    <div class="grid grid-cols-2 gap-1.5">
+                      {[
+                        ["Voetbalscholen", "Blokken, clinics en rittenkaarten"],
+                        ["Keeperscholen", "Beoordelen op wat een keeper doet"],
+                        ["Spelervolgsysteem", "Rapport in dertig seconden"],
+                        ["Inschrijven en incasso", "Van aanmelding tot betaald"],
+                      ].map(([titel, tekst]) => (
+                        <div class="rounded-xl px-3 py-2.5 hover:bg-white/[0.05]">
+                          <p class="text-[13.5px] font-semibold text-white">{titel}</p>
+                          <p class="mt-0.5 text-xs text-white/45">{tekst}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 4. Met aankondigingsbalk */}
+              {v.nr === "4" && (
+                <div class="relative -mt-6">
+                  <div class="border-b border-white/10 bg-accent/[0.12] py-2 text-center text-[13px] text-white/80">
+                    <span class="mr-2 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-ink">
+                      Nieuw
+                    </span>
+                    Elke speler een eigen kaart die meegroeit
+                    <span class="ml-2 font-semibold text-accent">Bekijken →</span>
+                  </div>
+                  <div class="px-5 py-4">
+                    <div class="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-ink/70 backdrop-blur-xl">
+                      <div class="flex h-14 items-center justify-between gap-4 pl-5 pr-2">
+                        <img src={`${basis}/logo/playerpath-logo-wit.png`} alt="" class="w-auto" style="height:28px" />
+                        <div class="hidden items-center gap-0.5 lg:flex">
+                          {links.map((l, i) => (
+                            <span
+                              class={`rounded-lg px-3.5 py-2 text-[13.5px] font-medium ${i === 0 ? "bg-white/[0.08] text-white" : "text-white/60"}`}
+                            >
+                              {l}
+                            </span>
+                          ))}
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                          <span class="px-3 py-2 text-[13.5px] font-medium text-white/65">Inloggen</span>
+                          <span class="rounded-xl bg-accent px-4 py-2 text-[13.5px] font-semibold text-ink">
+                            Plan een demo
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 5. Logo in het midden */}
+              {v.nr === "5" && (
+                <div class="relative -my-6 border-b border-white/10 bg-ink/95">
+                  <div class="mx-auto grid h-16 max-w-6xl grid-cols-[1fr_auto_1fr] items-center px-6">
+                    <div class="flex items-center gap-7">
+                      {links.slice(0, 2).map((l) => (
+                        <span class="text-[14px] font-medium text-white/60">{l}</span>
+                      ))}
+                    </div>
+                    <img src={`${basis}/logo/playerpath-logo-wit.png`} alt="" class="w-auto" style="height:28px" />
+                    <div class="flex items-center justify-end gap-6">
+                      <span class="text-[14px] font-medium text-white/60">Tarieven</span>
+                      <span class="rounded-lg bg-accent px-4 py-2 text-[14px] font-semibold text-ink">
+                        Plan een demo
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 6. Minimaal */}
+              {v.nr === "6" && (
+                <div class="relative px-5">
+                  <div class="mx-auto flex max-w-6xl items-center justify-between">
+                    <img src={`${basis}/logo/playerpath-logo-wit.png`} alt="" class="w-auto" style="height:32px" />
+                    <div class="flex items-center gap-6">
+                      <span class="text-[14px] font-medium text-white/70">Tarieven</span>
+                      <span class="text-[14px] font-medium text-white/70">Inloggen</span>
+                      <span class="rounded-xl bg-accent px-5 py-2.5 text-[14px] font-semibold text-ink">
+                        Plan een demo
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

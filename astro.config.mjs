@@ -12,7 +12,7 @@ export default defineConfig({
   // daar niet in: die is alleen zinvol na het versturen van het formulier.
   integrations: [
     sitemap({
-      filter: (pagina) => !pagina.includes('/bedankt'),
+      filter: (pagina) => !pagina.includes('/bedankt') && !pagina.includes('/menu-opties'),
       // Zonder lastmod moet Google zelf gokken of er iets veranderd is.
       serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
     }),
