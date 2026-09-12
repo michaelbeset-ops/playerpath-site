@@ -2,12 +2,10 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-// site + base zijn nodig voor GitHub Pages: de site draait niet op de
-// hoofdmap maar onder /playerpath-site/. Krijg je later een eigen domein
-// (bijvoorbeeld playerpath.nl), zet `base` dan terug op '/'.
+// De site draait op zijn eigen domein, dus geen basispad meer.
+// Het bestand public/CNAME vertelt GitHub Pages welk domein dat is.
 export default defineConfig({
-  site: 'https://michaelbeset-ops.github.io',
-  base: '/playerpath-site',
+  site: 'https://playerpath.nl',
 
   vite: {
     plugins: [tailwindcss()],
