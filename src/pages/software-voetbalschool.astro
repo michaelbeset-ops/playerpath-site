@@ -3,6 +3,9 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import PageHero from "../components/PageHero.astro";
 import ContentBlock from "../components/ContentBlock.astro";
+import FeatureBlock from "../components/FeatureBlock.astro";
+import Screen from "../components/Screen.astro";
+import VisualPlanning from "../components/VisualPlanning.astro";
 import FaqBlock from "../components/FaqBlock.astro";
 import RelatedPages from "../components/RelatedPages.astro";
 import TrialForm from "../components/TrialForm.astro";
@@ -70,15 +73,21 @@ const vragen = [
       tint
     />
 
-    <ContentBlock
+    <FeatureBlock
       eyebrow="Van aanmelding tot eerste training"
-      titel="Eén link, en de rest gaat vanzelf"
-      alineas={[
-        "Je deelt één inschrijflink, bijvoorbeeld in je Instagram-bio of in de appgroep van de club. Een ouder kiest een groep, ziet het tarief, vult de gegevens van zijn kind in en rekent af met iDEAL of geeft een machtiging voor automatische incasso.",
-        "Bij jou komt die aanmelding in een inbox terecht. Keur je hem goed, dan maakt het systeem in één handeling de speler aan, koppelt het de ouder aan een account, zet het abonnement klaar en start de betaling. Jij typt niets over.",
-        "Is een groep vol, dan komt de volgende aanmelding op de wachtlijst. Zegt er iemand af, dan nodig je de eerste van die lijst uit zonder je hele mailbox door te spitten.",
+      title="Eén link, en de rest gaat vanzelf"
+      text="Je deelt één inschrijflink, bijvoorbeeld in je Instagram-bio of in de appgroep van de club. Keur je een aanmelding goed, dan staan speler, ouderaccount, abonnement en betaling in één handeling klaar. En elke training staat in één rooster dat trainers en ouders allebei zien."
+      punten={[
+        "Trainingen per groep, locatie en trainer",
+        "Wekelijks herhalen, één keer instellen",
+        "Vol is vol, de rest komt op de wachtlijst",
+        "Aanwezigheid afvinken naast het veld",
       ]}
-    />
+    >
+      <Screen name="trainingen" alt="Het trainingsrooster van een voetbalschool in PlayerPath">
+        <VisualPlanning />
+      </Screen>
+    </FeatureBlock>
 
     <ContentBlock
       eyebrow="Wat het oplevert"
