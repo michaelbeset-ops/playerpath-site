@@ -17,7 +17,7 @@ const actief = (href: string) => huidig === href.replace(/\/$/, "");
 
 <header
   id="kop"
-  class="sticky top-0 z-50 border-b border-white/10 bg-ink/95 backdrop-blur-xl transition-shadow duration-300"
+  class="sticky top-0 z-50 border-b border-white/10 bg-ink transition-shadow duration-300"
 >
   <nav class="mx-auto flex h-16 max-w-7xl items-center gap-8 px-5 sm:px-8" aria-label="Hoofdmenu">
     <a href={`${basis}/`} class="flex shrink-0 items-center">
@@ -132,8 +132,12 @@ const actief = (href: string) => huidig === href.replace(/\/$/, "");
   // Zodra je scrollt krijgt de balk een schaduw, zodat hij loskomt van de
   // lichte secties die eronder doorlopen.
   if (kop) {
+    // Alleen iets doen als de toestand echt wisselt, niet bij elke scrollpixel.
+    let vorige: boolean | null = null;
     const bijwerken = () => {
       const gescrold = window.scrollY > 8;
+      if (gescrold === vorige) return;
+      vorige = gescrold;
       kop.classList.toggle("shadow-lg", gescrold);
       kop.classList.toggle("shadow-ink/40", gescrold);
     };
