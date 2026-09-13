@@ -6,9 +6,7 @@ import ContentBlock from "../components/ContentBlock.astro";
 import FeatureBlock from "../components/FeatureBlock.astro";
 import Screen from "../components/Screen.astro";
 import VisualBetalingen from "../components/VisualBetalingen.astro";
-import VisualPlanning from "../components/VisualPlanning.astro";
 import FaqBlock from "../components/FaqBlock.astro";
-import MobileShowcase from "../components/MobileShowcase.astro";
 import RelatedPages from "../components/RelatedPages.astro";
 import TrialForm from "../components/TrialForm.astro";
 import Footer from "../components/Footer.astro";
@@ -65,9 +63,15 @@ const vragen = [
       ]}
       tint
     >
-      <Screen name="inschrijven" alt="Het openbare inschrijfformulier van een voetbalschool">
-        <VisualPlanning />
-      </Screen>
+      <!-- Tijdelijk de telefoonversie: er is nog geen desktopschermafbeelding van het inschrijfformulier. -->
+      <div class="mx-auto w-[62%] max-w-[17rem]">
+        <Screen
+          name="inschrijven-mobiel"
+          alt="Het openbare inschrijfformulier van een voetbalschool op een telefoon"
+          variant="phone"
+          sizes="(min-width: 1024px) 272px, 62vw"
+        />
+      </div>
     </FeatureBlock>
 
     <FeatureBlock
@@ -95,8 +99,6 @@ const vragen = [
         "Dat werk verdwijnt niet omdat je harder werkt, maar omdat het systeem het overneemt. Op de homepage staat een rekentool waarin je je eigen aantallen invult, inclusief de aannames waarmee gerekend wordt.",
       ]}
     />
-
-    <MobileShowcase />
 
     <FaqBlock titel="Vragen over inschrijven en betalen" vragen={vragen} tint={false} />
 
