@@ -8,8 +8,8 @@ import PitchLines from "./PitchLines.astro";
 import { kaarten } from "../data/spelers";
 
 // De hero: tekst links, het product rechts, allebei in het eerste scherm.
-// Het dashboard kantelt licht naar achteren en loopt over de rand van de
-// pagina, zodat het voelt als een echt product in plaats van een plaatje.
+// Het dashboard kantelt licht naar achteren, zodat het voelt als een echt
+// product in plaats van een plaatje, maar blijft in zijn geheel in beeld.
 const goud = kaarten.find((kaart) => kaart.level === "goud")!;
 
 const feiten = [
@@ -111,7 +111,7 @@ const feiten = [
       </dl>
     </div>
 
-    <div class="relative max-sm:-mr-28 max-lg:mb-4 lg:-mr-44 xl:-mr-64">
+    <div class="relative max-lg:mb-4">
       <div class="[perspective:2200px]">
         <div class="hero-kantel">
           <Screen
@@ -128,7 +128,7 @@ const feiten = [
       </div>
 
       <div
-        class="hero-zweef absolute -top-6 right-6 z-10 w-64 rounded-2xl border border-white/10 bg-ink/90 p-3.5 shadow-2xl shadow-black/40 backdrop-blur-xl max-sm:hidden lg:right-52 xl:right-80"
+        class="hero-zweef absolute -top-6 right-6 z-10 w-64 rounded-2xl border border-white/10 bg-ink/90 p-3.5 shadow-2xl shadow-black/40 backdrop-blur-xl max-sm:hidden lg:right-10"
         aria-hidden="true"
       >
         <div class="flex items-center gap-3">
